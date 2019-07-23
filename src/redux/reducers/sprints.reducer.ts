@@ -2,9 +2,10 @@ import { ActionType } from "../actions";
 import IEntityMap from "../utils/entity-map.interface";
 import { Sprint } from "../../entities/sprint.entity";
 import IAction from "../utils/action.interface";
+import { removeFromArray, removeFromObject } from "../utils/store.utils";
 
 export default function sprintsReducer(
-  state: IEntityMap<Sprint> = { next: 0 },
+  state: IEntityMap<Sprint> = { entities: {}, ids: [] },
   action: IAction
 ) {
   switch (action.type) {
@@ -23,27 +24,38 @@ export default function sprintsReducer(
 }
 
 const addSprint = (state: IEntityMap<Sprint>, payload: any) => {
-  const newId = state.next;
+  const nextId = state.ids.length;
+  const { sprint } = payload;
+  sprint.id = nextId;
+
   return {
     ...state,
-    [newId]: payload.sprint,
-    next: newId + 1
-  };
+    entities: {
+      ...state.entities,
+      [nextId]: sprint,
+    },
+    ids: [...state.ids, nextId]
+  }
 }
 
 const updateSprint = (state: IEntityMap<Sprint>, payload: any) => {
-  const newId = state.next;
+  const { sprint } = payload;
+
   return {
     ...state,
-    [payload.sprint.id]: payload.sprint,
-  };
+    entities: {
+      ...state.entities,
+      [sprint.id]: sprint
+    },
+  }
 }
 
 const removeSprint = (state: IEntityMap<Sprint>, payload: any) => {
-  const newId = state.next;
+  const { sprintId } = payload;
+
   return {
     ...state,
-    [newId]: payload.sprint,
-    next: newId + 1
+    entities: removeFromObject(state.entities, sprintId),
+    ids: removeFromArray(state.ids, sprintId)
   };
 }

@@ -1307,7 +1307,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.8.tgz#e469b4bf9d1c9832aee4907ba8a051494357c12c"
   integrity sha512-aX+gFgA5GHcDi89KG5keey2zf0WfZk/HAQotEamsK2kbey+8yGKcson0hbK8E+v0NArlCJQCqMP161YhV6ZXLg==
 
-"@types/prop-types@*":
+"@types/prop-types@*", "@types/prop-types@^15.7.1":
   version "15.7.1"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.1.tgz#f1a11e7babb0c3cad68100be381d1e064c68f1f6"
   integrity sha512-CFzn9idOEpHrgdw8JsoTkaDDyRWk1jrzIV8djzcgpq0y9tG4B4lFT+Nxh52DVpDXV+n4+NPNv7M1Dj5uMp6XFg==
@@ -7963,6 +7963,14 @@ react-app-polyfill@^1.0.1:
     raf "3.4.1"
     regenerator-runtime "0.13.2"
     whatwg-fetch "3.0.0"
+
+react-contenteditable@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-contenteditable/-/react-contenteditable-3.3.0.tgz#549acd3ff1655be598ad79f6ea57594ea08968b6"
+  integrity sha512-PYPKNySoqjlTmva/aD8fgN5dh5ky7QAwijPiAfIH0lTKAfdNqU930Dep3QNb00VtGzao9mMda7aJNeNCqIwUSA==
+  dependencies:
+    "@types/prop-types" "^15.7.1"
+    fast-deep-equal "^2.0.1"
 
 react-dev-utils@^9.0.1:
   version "9.0.1"

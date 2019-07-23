@@ -5,6 +5,7 @@ import IAction from "./utils/action.interface";
 
 export enum ActionType {
   ADD_TEAM,
+  UPDATE_TEAM,
   REMOVE_TEAM,
   ADD_TEAM_MEMBER,
   UPDATE_TEAM_MEMBER,
@@ -25,6 +26,13 @@ function addTeam(team: Team): IAction {
     type: ActionType.ADD_TEAM,
     payload: { team }
   };
+}
+
+function updateTeam(team: Team): IAction {
+  return {
+    type: ActionType.UPDATE_TEAM,
+    payload: { team }
+  }
 }
 
 function removeTeam(teamId: TeamId): IAction {
@@ -55,21 +63,21 @@ function removeTeamMember(teamId: TeamId, teamMemberId: TeamMemberId): IAction {
   };
 }
 
-function addSprint(sprint: Sprint): IAction {
+export function addSprint(sprint: Sprint): IAction {
   return {
-    type: ActionType.ADD_TEAM,
+    type: ActionType.ADD_SPRINT,
     payload: { sprint }
   };
 }
 
-function updateSprint(sprint: Sprint): IAction {
+export function updateSprint(sprint: Sprint): IAction {
   return {
     type: ActionType.UPDATE_SPRINT,
     payload: { sprint }
   };
 }
 
-function removeSprint(sprintId: SprintId): IAction {
+export function removeSprint(sprintId?: SprintId): IAction {
   return {
     type: ActionType.REMOVE_SPRINT,
     payload: { sprintId }

@@ -1,4 +1,6 @@
 export default interface IEntityMap<T> {
-  [id: number]: T,
-  next: number
+  entities: {
+    [key: number]: T
+  },
+  ids: number[]
 };
