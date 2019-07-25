@@ -4,23 +4,53 @@ import { TeamMember, TeamMemberId } from "../entities/team-member.entity";
 import IAction from "./utils/action.interface";
 
 export enum ActionType {
+  // UI
+  SELECT_SPRINT,
+
+  // Team
   ADD_TEAM,
   UPDATE_TEAM,
   REMOVE_TEAM,
+
+  // Team Member
   ADD_TEAM_MEMBER,
   UPDATE_TEAM_MEMBER,
   REMOVE_TEAM_MEMBER,
+
+  // Sprint
   ADD_SPRINT,
   UPDATE_SPRINT,
   REMOVE_SPRINT,
+
+  // User Story
   ADD_USER_STORY,
   UPDATE_USER_STORY,
   REMOVE_USER_STORY,
+
+  // Item
   ADD_ITEM,
   UPDATE_ITEM,
   REMOVE_ITEM
 }
 
+/**
+ * ============================================
+ * Actions for UI
+ * ============================================
+ */
+
+export function selectSprint(sprintIndex: number): IAction {
+  return {
+    type: ActionType.SELECT_SPRINT,
+    payload: { sprintIndex }
+  };
+}
+
+/**
+ * ============================================
+ * Actions for Team
+ * ============================================
+ */
 function addTeam(team: Team): IAction {
   return {
     type: ActionType.ADD_TEAM,
@@ -42,6 +72,11 @@ function removeTeam(teamId: TeamId): IAction {
   };
 }
 
+/**
+ * ============================================
+ * Actions for Team Member
+ * ============================================
+ */
 function addTeamMember(teamId: TeamId, teamMember: TeamMember): IAction {
   return {
     type: ActionType.ADD_TEAM_MEMBER,
@@ -63,6 +98,11 @@ function removeTeamMember(teamId: TeamId, teamMemberId: TeamMemberId): IAction {
   };
 }
 
+/**
+ * ============================================
+ * Actions for Sprint
+ * ============================================
+ */
 export function addSprint(sprint: Sprint): IAction {
   return {
     type: ActionType.ADD_SPRINT,

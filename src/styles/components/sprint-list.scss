@@ -1,0 +1,31 @@
+.sprint-list {
+  width: 350px;
+  border: 1px solid #eee;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 19px;
+    border-bottom: 1px solid $lightgray;
+
+    h1 {
+      font-size: 14px;
+    }
+  }
+
+  &__add {
+    padding: 2px;
+    font-size: 16px;
+    cursor: pointer;
+    color: $primary;
+  }
+
+  &__no-items {
+    padding: 19px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+  }
+}

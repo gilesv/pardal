@@ -1,0 +1,18 @@
+.app {
+  padding: 30px;
+
+  header {
+    margin-bottom: 20px;
+
+    .app-title {
+      font-size: 2em;
+      margin: 0;
+      color: $primary;
+
+      span {
+        font-size: 10px;
+        color: $lightgray;
+      }
+    }
+  }
+}
