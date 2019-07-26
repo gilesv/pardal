@@ -1,15 +1,16 @@
 .sprint-list {
-  width: 350px;
-  border: 1px solid #eee;
+  border: 1px solid $lightgray;
+  border-radius: 3px;
 
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2px 19px;
+    padding: 7px 11px;
     border-bottom: 1px solid $lightgray;
 
     h1 {
+      margin-left: 6px;
       font-size: 14px;
     }
   }
@@ -26,6 +27,5 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
   }
 }

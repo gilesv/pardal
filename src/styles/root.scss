@@ -1,0 +1,22 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  font-size: 12px !important;
+}
+
+// colors
+$primary: #6600ff;
+
+$lightgray: #cfd0d1;
+$lightpurple: #d8c1fb;
+
+@import "./components/app";
+@import "./components/dashboard";
+@import "./components/sprint-list";
+@import "./components/sprint-item";
+@import "./components/collapsible-card";
+
+// resets
+button.bp3-button {
+  font-size: 12px;
+}

@@ -1,14 +1,13 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Sprint, SprintId } from "../entities/sprint.entity";
-import { connect } from "react-redux";
-import { IStore } from "../redux/reducers";
 import SprintItem, { ContentEditableEvent } from "./SprintItem";
 import { removeSprint, addSprint, updateSprint, selectSprint } from "../redux/actions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Button, Alert, Intent } from "@blueprintjs/core";
+import { connect } from "react-redux";
+import { IStore } from "../redux/reducers";
 
 interface Props {
-  sprints: Sprint[],
+  sprints: { [key: number]: Sprint },
   sprintsIds: SprintId[],
   deleteSprint: Function,
   selectedSprint: SprintId | undefined,
@@ -20,8 +19,24 @@ class SprintList extends React.Component<Props> {
     super(props);
   }
 
+  public state = {
+    isAlertOpen: false,
+  }
+
+  generateSprintName(): string {
+    const defaultName = "Sprint";
+    let name = `${defaultName} 1`;
+    let counter = 1;
+    while (this.sprintExists(name)) {
+      name = `${defaultName} ${counter++}`;
+    }
+
+    return name;
+  }
+
   addSprint() {
     const newSprint = new Sprint();
+    newSprint.name = this.generateSprintName();
     this.props.dispatch(addSprint(newSprint));
   }
 
@@ -30,11 +45,16 @@ class SprintList extends React.Component<Props> {
     this.props.dispatch(updateSprint(sprint));
   }
 
-  removeSprint(sprintId?: SprintId) {
-    const ids = this.props.sprints.map(s => s.id); // TODO: make this shit better
-    if (ids.indexOf(sprintId) < 0) {
-      sprintId = ids.length - 1;
+  sprintExists(name: string): boolean {
+    for (let id of this.props.sprintsIds) {
+      if (this.props.sprints[id].name === name) {
+        return true;
+      }
     }
+    return false;
+  }
+
+  removeSprint(sprintId?: SprintId) {
     this.props.dispatch(removeSprint(sprintId));
   }
 
@@ -43,29 +63,56 @@ class SprintList extends React.Component<Props> {
     this.props.dispatch(selectSprint(sprintIndex));
   }
 
+  openAlert() {
+    this.setState({
+      ...this.state,
+      isAlertOpen: true,
+    });
+  }
+
+  closeAlert() {
+    this.setState({
+      ...this.state,
+      isAlertOpen: false,
+    });
+  }
+
   render() {
-    const { sprints, selectedSprint } = this.props;
+    const { sprints, sprintsIds, selectedSprint } = this.props;
 
     return (
       <div className="sprint-list">
+        <Alert
+          confirmButtonText="Alright"
+          isOpen={this.state.isAlertOpen}
+          intent={Intent.NONE}
+          onClose={() => this.closeAlert()}
+          canOutsideClickCancel={true}
+          canEscapeKeyCancel={true}
+        >
+          <p>
+            This name is already being used.
+          </p>
+        </Alert>
         <div className="sprint-list__header">
           <h1>Sprints</h1>
-          <div className="sprint-list__add" onClick={(e) => this.addSprint()} >
-            <FontAwesomeIcon icon={faPlus} />
-          </div>
+          <Button text="Add Sprint" intent="success" onClick={(e: SyntheticEvent) => this.addSprint()} />
         </div>
 
         <div>
           {
-            sprints && sprints.length > 0 ?
-              sprints.map((sprint, index) =>
-                <SprintItem
+            sprintsIds && sprintsIds.length > 0 ?
+              sprintsIds.map((sprintId, index) => {
+                const sprint = this.props.sprints[sprintId];
+                return <SprintItem
                   sprint={sprint}
                   key={`sprint#${sprint.id}`}
                   isSelected={selectedSprint === index}
                   onSelect={(sprintId?: SprintId) => this.onSelect(sprintId)}
                   updateSprint={(sprint: Sprint, e: ContentEditableEvent) => this.updateSprint(sprint, e)}
                   removeSprint={(sprintId?: SprintId) => this.removeSprint(sprintId)} />
+              }
+
               ) : <div className="sprint-list__no-items">Nothing here (yet)</div>
           }
         </div>
@@ -76,7 +123,7 @@ class SprintList extends React.Component<Props> {
 
 const mapStateToProps = (state: IStore, props: any): Props => {
   return {
-    sprints: Object.values(state.sprints.entities),
+    sprints: state.sprints.entities,
     sprintsIds: state.sprints.ids,
     selectedSprint: state.ui.selectedSprint,
     ...props

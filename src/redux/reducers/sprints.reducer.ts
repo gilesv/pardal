@@ -18,6 +18,9 @@ export default function sprintsReducer(
     case ActionType.REMOVE_SPRINT:
       return removeSprint(state, action.payload);
 
+    case ActionType.ADD_USER_STORY:
+      return addStoryToSprint(state, action.payload);
+
     default:
       return state;
   }
@@ -57,5 +60,19 @@ const removeSprint = (state: IEntityMap<Sprint>, payload: any) => {
     ...state,
     entities: removeFromObject(state.entities, sprintId),
     ids: removeFromArray(state.ids, sprintId)
+  };
+}
+
+const addStoryToSprint = (state: IEntityMap<Sprint>, payload: any) => {
+  const { story, sprintId } = payload;
+  const sprint = state.entities[sprintId];
+  sprint.stories = sprint.stories.concat(story.id);
+
+  return {
+    ...state,
+    entities: {
+      ...state.entities,
+      [sprintId]: sprint
+    },
   };
 }

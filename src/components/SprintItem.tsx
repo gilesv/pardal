@@ -54,7 +54,7 @@ export default class SprintItem extends React.Component<Props> {
         </div>
 
         <div className={`sprint-item__items-count`}>
-          {`${sprint.items ? sprint.items.length : "0"} items`}
+          {`${sprint.stories ? sprint.stories.length : "No"} items`}
         </div>
       </div>
     );

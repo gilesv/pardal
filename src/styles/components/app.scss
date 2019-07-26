@@ -1,17 +1,29 @@
 .app {
+  width: 80%;
+  height: 100%;
   padding: 30px;
+  margin: 0 auto;
+
+  @media (max-width: 900px) {
+    padding: 20px;
+    width: 100%;
+  }
 
   header {
     margin-bottom: 20px;
 
     .app-title {
-      font-size: 2em;
+      font-size: 33px;
       margin: 0;
       color: $primary;
+      font-family: Fira Code;
+      font-weight: bold;
 
       span {
         font-size: 10px;
-        color: $lightgray;
+        color: $lightpurple;
+        vertical-align: super;
+        margin-left: 2px;
       }
     }
   }

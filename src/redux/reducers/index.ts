@@ -8,17 +8,21 @@ import { TeamMember } from "../../entities/team-member.entity";
 import { Team } from "../../entities/team.entity";
 import IUiState from "../utils/ui-state.interface";
 import uiReducer from "./ui.reducer";
+import storiesReducer from "./stories.reducer";
+import { UserStory } from "../../entities/user-story.entity";
 
 export interface IStore {
   ui: IUiState,
   sprints: IEntityMap<Sprint>,
   teams: IEntityMap<Team>,
-  teamMembers: IEntityMap<TeamMember>
+  teamMembers: IEntityMap<TeamMember>,
+  userStories: IEntityMap<UserStory>
 }
 
 export default combineReducers({
   ui: uiReducer,
   sprints: sprintsReducer,
   teams: teamsReducer,
-  teamMembers: teamMembersReducer
+  teamMembers: teamMembersReducer,
+  userStories: storiesReducer
 });

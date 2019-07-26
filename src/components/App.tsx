@@ -1,19 +1,25 @@
 import React from "react";
 import SprintList from "./SprintList";
-import "../styles/app.scss";
-import { SprintId } from "../entities/sprint.entity";
+import SprintDetails from "./SprintDetails";
 
-export default class App extends React.Component {
+export default class Dashboard extends React.Component {
   render() {
     return (
       <div className="app">
         <header>
-          <div className="app-title">taskbase <span>v0.0.1</span></div>
+          <div className="app-title"> >=pardal<span>v0.0.1</span></div>
         </header>
 
-        <main>
-          <SprintList />
-        </main>
+        <div className="dashboard">
+          <aside>
+            <SprintList />
+          </aside>
+
+          <main>
+            <SprintDetails />
+          </main>
+        </div>
+
       </div>
     );
   }

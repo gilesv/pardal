@@ -1,0 +1,21 @@
+.ccard {
+  border: 1px solid $lightgray;
+  border-radius: 3px;
+  padding: 8px;
+  background-color: #f2eaff;
+
+  &__header {
+    padding: 3px;
+    font-size: 14px;
+    cursor: pointer;
+
+    .bp3-tag {
+      font-size: 11px;
+      margin-right: 10px;
+    }
+  }
+
+  &__body {
+    padding: 5px;
+  }
+}

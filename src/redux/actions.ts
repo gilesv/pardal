@@ -2,6 +2,7 @@ import { Sprint, SprintId } from "../entities/sprint.entity";
 import { Team, TeamId } from "../entities/team.entity";
 import { TeamMember, TeamMemberId } from "../entities/team-member.entity";
 import IAction from "./utils/action.interface";
+import { UserStory, UserStoryId } from "../entities/user-story.entity";
 
 export enum ActionType {
   // UI
@@ -121,5 +122,31 @@ export function removeSprint(sprintId?: SprintId): IAction {
   return {
     type: ActionType.REMOVE_SPRINT,
     payload: { sprintId }
+  };
+}
+
+/**
+ * ============================================
+ * Actions for UserStory
+ * ============================================
+ */
+export function addStory(story: UserStory, sprintId?: SprintId): IAction {
+  return {
+    type: ActionType.ADD_USER_STORY,
+    payload: { story, sprintId }
+  };
+}
+
+export function updateStory(story: UserStory): IAction {
+  return {
+    type: ActionType.UPDATE_USER_STORY,
+    payload: { story }
+  };
+}
+
+export function removeStory(storyId?: UserStoryId): IAction {
+  return {
+    type: ActionType.REMOVE_USER_STORY,
+    payload: { storyId }
   };
 }
