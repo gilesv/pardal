@@ -1,8 +1,8 @@
 .ccard {
-  border: 1px solid $lightgray;
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.2);
+  background-color: white;
   border-radius: 3px;
   padding: 8px;
-  background-color: #f2eaff;
 
   &__header {
     padding: 3px;

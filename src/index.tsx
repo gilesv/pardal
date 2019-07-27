@@ -6,9 +6,9 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 
 // Styles
-import "./styles/root.scss";
 import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
+import "./styles/root.scss";
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,0 +1,43 @@
+.story-details {
+  border: 1px solid $lightgray;
+  border-radius: 3px;
+  padding: 15px;
+  background: whitesmoke;
+  box-shadow: 0px 0px 1px rgba(0,0,0,0.2);
+
+  &__header {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__controls {
+    margin-top: 5px;
+    margin-right: 5px;
+
+    button.bp3-button + button.bp3-button {
+      margin-left: 11px;
+    }
+  }
+
+  &__body {
+    padding: 0 8px;
+    margin-bottom: 12px;
+  }
+
+  &__name {
+    font-size: 20px;
+    border: 1px solid transparent;
+    width: fit-content;
+    max-width: 85%;
+    padding: 3px 6px;
+    cursor: text;
+
+    &:hover, &:focus {
+      border-color: $lightgray;
+      background-color: #fff;
+      outline: none;
+    }
+  }
+}

@@ -5,10 +5,18 @@
   height: 100%;
   
   aside {
-    flex-basis: 25%;
+    flex-basis: 27%;
   }
 
   main {
     flex-basis: 70%;
+  }
+
+  @media (max-width: 900px) {
+    flex-flow: column-reverse;
+
+    aside {
+      margin-top: 10px;
+    }
   }
 }

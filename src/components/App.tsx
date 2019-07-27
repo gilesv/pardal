@@ -1,6 +1,6 @@
 import React from "react";
-import SprintList from "./SprintList";
-import SprintDetails from "./SprintDetails";
+import StoryList from "./StoryList";
+import StoryDetails from "./StoryDetails";
 
 export default class Dashboard extends React.Component {
   render() {
@@ -12,11 +12,11 @@ export default class Dashboard extends React.Component {
 
         <div className="dashboard">
           <aside>
-            <SprintList />
+            <StoryList />
           </aside>
 
           <main>
-            <SprintDetails />
+            <StoryDetails />
           </main>
         </div>
 

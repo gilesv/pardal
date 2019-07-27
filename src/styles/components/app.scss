@@ -4,7 +4,7 @@
   padding: 30px;
   margin: 0 auto;
 
-  @media (max-width: 900px) {
+  @media (max-width: 1200px) {
     padding: 20px;
     width: 100%;
   }
@@ -13,7 +13,7 @@
     margin-bottom: 20px;
 
     .app-title {
-      font-size: 33px;
+      font-size: 26px;
       margin: 0;
       color: $primary;
       font-family: Fira Code;

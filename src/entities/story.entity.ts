@@ -1,8 +1,11 @@
-import { ItemId } from "./item.entity";
+import { TaskId } from "./task.entity";
 
-export class UserStory {
-  constructor(id: UserStoryId) {
+export type StoryId = number;
+
+export class Story {
+  constructor(id: StoryId, name: string) {
     this.id = id;
+    this.name = name || "New Story";
     this.article = "As a";
     this.actor = "User";
     this.verb = "I want to";
@@ -15,10 +18,11 @@ export class UserStory {
     this.startDate = new Date();
     this.handOffDate = new Date();
     this.description = "";
-    this.items = [];
+    this.tasks = [];
   }
 
-  public id: UserStoryId;
+  public id: StoryId;
+  public name: string;
   public article: string;
   public actor: string;
   public verb: string;
@@ -30,7 +34,5 @@ export class UserStory {
   public startDate: Date;
   public handOffDate: Date;
   public description: string;
-  public items?: ItemId[];
+  public tasks: TaskId[];
 }
-
-export type UserStoryId = number;

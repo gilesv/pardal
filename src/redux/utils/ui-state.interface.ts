@@ -1,4 +1,4 @@
 export default interface IUiState {
-  selectedSprint: number,
+  selectedStory: number,
   [key: string]: any
 }

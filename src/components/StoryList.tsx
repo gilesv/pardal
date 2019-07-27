@@ -1,58 +1,94 @@
 import React, { SyntheticEvent } from "react";
-import { Sprint } from "../entities/sprint.entity";
-import StoryItem from "./StoryItem";
-import { UserStory, UserStoryId } from "../entities/user-story.entity";
+import StoryListItem from "./StoryListItem";
+import { addStory, removeStory, updateStory, selectStory } from "../redux/actions";
+import { Button } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../redux/reducers";
-import { Button } from "@blueprintjs/core";
-import { addStory } from "../redux/actions";
+import { Story, StoryId } from "../entities/story.entity";
 
 interface Props {
-  stories: { [key: number]: UserStory },
-  storiesIds: UserStoryId[],
-  sprint: Sprint,
+  story: { [key: number]: Story },
+  storiesIds: StoryId[],
+  deleteStory: () => void,
+  selectedStory: StoryId,
   [key: string]: any
-}
+};
 
 class StoryList extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
   }
 
-  addStory() {
+  public addStory() {
     const id = this.props.storiesIds.length;
-    const story = new UserStory(id);
-    this.props.dispatch(addStory(story, this.props.sprint.id));
+    const story = new Story(id, this.generateNewName());
+    this.props.dispatch(addStory(story));
+  }
+
+  private generateNewName(): string {
+    const defaultName = "New Story";
+    let name = `${defaultName} 1`;
+    let counter = 1;
+
+    while (this.storyExists(name)) {
+      name = `${defaultName} ${counter++}`;
+    }
+
+    return name;
+  }
+
+  private storyExists(name: string): boolean {
+    for (let id of this.props.storiesIds) {
+      if (this.props.stories[id].name === name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public removeStory(storyId: StoryId) {
+    this.props.dispatch(removeStory(storyId));
+  }
+
+  public selectStory(storyId: StoryId) {
+    const index = this.props.storiesIds.indexOf(storyId || 0);
+    this.props.dispatch(selectStory(index));
   }
 
   render() {
-    const { sprint } = this.props;
+    const { stories, storiesIds, selectedStory } = this.props;
+
     return (
       <div className="story-list">
         <div className="story-list__header">
+          <h1>User Stories</h1>
+          <Button text="New Story" intent="success" onClick={(e: SyntheticEvent) => this.addStory()} />
+        </div>
+
+        <div className="story-list__body">
           {
-            sprint ? <Button intent="success" text="Add Story" onClick={(e: SyntheticEvent) => this.addStory()} /> : null
+            storiesIds && storiesIds.length > 0 ?
+              storiesIds.map((storyId, index) => {
+                const story: Story = this.props.stories[storyId];
+                return <StoryListItem
+                  story={story}
+                  key={`story#${storyId}`}
+                  isSelected={selectedStory === index}
+                  selectStory={(storyId: StoryId) => this.selectStory(storyId)}
+                  removeStory={(storyId: StoryId) => this.removeStory(storyId)} />
+              }) : <div className="story-list__no-items">Nothing here (yet)</div>
           }
         </div>
-        {
-          sprint && sprint.stories && sprint.stories.length > 0 ?
-            sprint.stories.map(storyId => {
-              const story = this.props.stories[storyId];
-              return <StoryItem story={story} />
-            })
-            : <span>Create an item!</span>
-        }
-
       </div>
-
-    );
+    )
   }
 }
 
 const mapStateToProps = (state: IStore, props: any): Props => {
   return {
-    stories: state.userStories.entities,
-    storiesIds: state.userStories.ids,
+    stories: state.stories.entities,
+    storiesIds: state.stories.ids,
+    selectedStory: state.ui.selectedStory,
     ...props
   };
 }

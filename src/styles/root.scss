@@ -12,11 +12,19 @@ $lightpurple: #d8c1fb;
 
 @import "./components/app";
 @import "./components/dashboard";
-@import "./components/sprint-list";
-@import "./components/sprint-item";
+@import "./components/story-details";
+@import "./components/story-list";
+@import "./components/story-list-item";
 @import "./components/collapsible-card";
+@import "./components/task-list";
+@import "./components/task-item";
 
 // resets
 button.bp3-button {
   font-size: 12px;
+}
+
+span.bp3-tag.bp3-minimal {
+  background-color: lavender !important;
+  color: $primary !important;
 }

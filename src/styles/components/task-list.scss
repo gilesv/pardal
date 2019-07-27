@@ -1,0 +1,5 @@
+.task-list {
+  .task-item + .task-item {
+    margin-top: 6px;
+  }
+}

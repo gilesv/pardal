@@ -1,6 +1,8 @@
-.sprint-list {
+.story-list {
   border: 1px solid $lightgray;
   border-radius: 3px;
+  background: whitesmoke;
+  box-shadow: 0px 0px 1px rgba(0,0,0,0.2);
 
   &__header {
     display: flex;
@@ -10,9 +12,15 @@
     border-bottom: 1px solid $lightgray;
 
     h1 {
+      font-weight: normal;
       margin-left: 6px;
       font-size: 14px;
     }
+  }
+
+  &__body {
+    height: 300px;
+    overflow-y: auto;
   }
 
   &__add {

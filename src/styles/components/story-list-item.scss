@@ -1,0 +1,36 @@
+.story-list-item {
+  border-left: 4px solid transparent;
+  font-size: 12px;
+  padding: 10px 15px;
+  position: relative;
+  cursor: pointer;
+
+  &__name {
+  }
+
+  &__delete {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: rgb(126, 126, 126);
+    opacity: 0;
+    display: none;
+  }
+
+  &:hover &__delete {
+    opacity: 1;
+  }
+
+  &.selected {
+    border-left-color: $primary;
+    background-color: lavender;
+    
+    &__name {
+      font-weight: 600;
+    }
+  }
+
+  &__items-count {
+    font-size: 10px;
+  }
+}

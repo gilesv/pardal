@@ -2,11 +2,12 @@ import { Sprint, SprintId } from "../entities/sprint.entity";
 import { Team, TeamId } from "../entities/team.entity";
 import { TeamMember, TeamMemberId } from "../entities/team-member.entity";
 import IAction from "./utils/action.interface";
-import { UserStory, UserStoryId } from "../entities/user-story.entity";
+import { Story, StoryId } from "../entities/story.entity";
+import { Task, TaskId } from "../entities/task.entity";
 
 export enum ActionType {
   // UI
-  SELECT_SPRINT,
+  SELECT_STORY,
 
   // Team
   ADD_TEAM,
@@ -28,10 +29,10 @@ export enum ActionType {
   UPDATE_USER_STORY,
   REMOVE_USER_STORY,
 
-  // Item
-  ADD_ITEM,
-  UPDATE_ITEM,
-  REMOVE_ITEM
+  // TASK
+  ADD_TASK,
+  UPDATE_TASK,
+  REMOVE_TASK
 }
 
 /**
@@ -40,10 +41,10 @@ export enum ActionType {
  * ============================================
  */
 
-export function selectSprint(sprintIndex: number): IAction {
+export function selectStory(storyIndex: number): IAction {
   return {
-    type: ActionType.SELECT_SPRINT,
-    payload: { sprintIndex }
+    type: ActionType.SELECT_STORY,
+    payload: { storyIndex }
   };
 }
 
@@ -130,23 +131,49 @@ export function removeSprint(sprintId?: SprintId): IAction {
  * Actions for UserStory
  * ============================================
  */
-export function addStory(story: UserStory, sprintId?: SprintId): IAction {
+export function addStory(story: Story): IAction {
   return {
     type: ActionType.ADD_USER_STORY,
-    payload: { story, sprintId }
+    payload: { story }
   };
 }
 
-export function updateStory(story: UserStory): IAction {
+export function updateStory(story: Story): IAction {
   return {
     type: ActionType.UPDATE_USER_STORY,
     payload: { story }
   };
 }
 
-export function removeStory(storyId?: UserStoryId): IAction {
+export function removeStory(storyId?: StoryId): IAction {
   return {
     type: ActionType.REMOVE_USER_STORY,
     payload: { storyId }
+  };
+}
+
+/**
+ * ============================================
+ * Actions for Task
+ * ============================================
+ */
+export function addTask(task: Task, storyId: StoryId): IAction {
+  return {
+    type: ActionType.ADD_TASK,
+    payload: { task, storyId }
+  };
+}
+
+export function updateTask(task: Task): IAction {
+  return {
+    type: ActionType.UPDATE_TASK,
+    payload: { task }
+  };
+}
+
+export function removeTask(taskId: TaskId): IAction {
+  return {
+    type: ActionType.REMOVE_TASK,
+    payload: { taskId }
   };
 }

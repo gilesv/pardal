@@ -8388,10 +8388,10 @@ react-app-polyfill@^1.0.1:
     regenerator-runtime "0.13.2"
     whatwg-fetch "3.0.0"
 
-react-contenteditable@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/react-contenteditable/-/react-contenteditable-3.3.0.tgz#549acd3ff1655be598ad79f6ea57594ea08968b6"
-  integrity sha512-PYPKNySoqjlTmva/aD8fgN5dh5ky7QAwijPiAfIH0lTKAfdNqU930Dep3QNb00VtGzao9mMda7aJNeNCqIwUSA==
+react-contenteditable@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/react-contenteditable/-/react-contenteditable-3.3.1.tgz#a3a6d7d040e57cb33d36f4e0d3aa0f9574d18475"
+  integrity sha512-AwJiVllQvE2IahfTJlgmW9gY8dkY2O2WzQURjs94702y2P06gHMp9EYgiVqCK3K+KedICulj/+m2gFG6itw1bg==
   dependencies:
     "@types/prop-types" "^15.7.1"
     fast-deep-equal "^2.0.1"
