@@ -8,6 +8,7 @@ import store from "./redux/store";
 // Styles
 import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/datetime/lib/css/blueprint-datetime.css";
 import "./styles/root.scss";
 
 ReactDOM.render(

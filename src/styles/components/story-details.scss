@@ -26,6 +26,45 @@
     margin-bottom: 12px;
   }
 
+  &__title #title-form {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    min-height: 30px;
+    font-size: 14px;
+
+    .label {
+      border: 1px solid transparent;
+      outline: none;
+      padding: 5px;
+      margin: 0 5px;
+      &:first-child {
+        padding-left: 0;
+        margin-left: 0;
+      }
+      &:hover, &:focus {
+        border-color: $lightgray;
+        background-color: #fff;
+      }
+    }
+    .field {
+      width: fit-content;
+    }
+  }
+
+  &__row {
+    display: flex;
+    flex-flow: row wrap;
+    
+    & > * {
+      margin-right: 20px;
+    }
+  }
+
+  .bp3-numeric-input input {
+    width: 50px;
+  }
+
   &__name {
     font-size: 20px;
     border: 1px solid transparent;
