@@ -1,7 +1,7 @@
 import React, { SyntheticEvent } from "react";
 import StoryListItem from "./StoryListItem";
 import { addStory, removeStory, updateStory, selectStory } from "../redux/actions";
-import { Button } from "@blueprintjs/core";
+import { Button, NonIdealState } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../redux/reducers";
 import { Story, StoryId } from "../entities/story.entity";
@@ -61,8 +61,8 @@ class StoryList extends React.Component<Props> {
     return (
       <div className="story-list">
         <div className="story-list__header">
-          <h1>User Stories</h1>
-          <Button text="New Story" intent="success" onClick={(e: SyntheticEvent) => this.addStory()} />
+          <h1>Stories</h1>
+          <Button text="Add Story" icon="cube-add" intent="success" onClick={(e: SyntheticEvent) => this.addStory()} />
         </div>
 
         <div className="story-list__body">
@@ -76,7 +76,11 @@ class StoryList extends React.Component<Props> {
                   isSelected={selectedStory === index}
                   selectStory={(storyId: StoryId) => this.selectStory(storyId)}
                   removeStory={(storyId: StoryId) => this.removeStory(storyId)} />
-              }) : <div className="story-list__no-items">Nothing here (yet)</div>
+              }) : <NonIdealState
+                className="story-list__no-items"
+                title="Nothing here 😴"
+                description="Add stories to start!"
+                icon="add-to-artifact" />
           }
         </div>
       </div>

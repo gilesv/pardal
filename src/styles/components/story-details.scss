@@ -26,57 +26,35 @@
     margin-bottom: 12px;
   }
 
-  &__title #title-form {
+  &__name {
     display: flex;
-    flex-flow: row wrap;
     align-items: center;
-    min-height: 30px;
-    font-size: 14px;
+    padding-left: 8px;
 
-    .label {
+    [contenteditable] {
+      display: inline-block;
+      font-family: Fira Code;
+      font-size: 20px;
       border: 1px solid transparent;
-      outline: none;
-      padding: 5px;
-      margin: 0 5px;
-      &:first-child {
-        padding-left: 0;
-        margin-left: 0;
-      }
+      width: fit-content;
+      max-width: 85%;
+      cursor: text;
+      margin-left: 8px;
+      padding: 0 4px;
+  
       &:hover, &:focus {
         border-color: $lightgray;
         background-color: #fff;
+        outline: none;
       }
     }
-    .field {
-      width: fit-content;
+
+    .bp3-tag {
+      height: 20px;
     }
   }
 
-  &__row {
-    display: flex;
-    flex-flow: row wrap;
-    
-    & > * {
-      margin-right: 20px;
-    }
-  }
-
-  .bp3-numeric-input input {
-    width: 50px;
-  }
-
-  &__name {
-    font-size: 20px;
-    border: 1px solid transparent;
-    width: fit-content;
-    max-width: 85%;
-    padding: 3px 6px;
-    cursor: text;
-
-    &:hover, &:focus {
-      border-color: $lightgray;
-      background-color: #fff;
-      outline: none;
-    }
+  &__nothing {
+    padding-bottom: 20px;
   }
 }

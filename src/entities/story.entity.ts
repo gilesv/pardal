@@ -6,6 +6,8 @@ export class Story {
   constructor(id: StoryId, name: string) {
     this.id = id;
     this.name = name || "New Story";
+    this.title = "";
+
     this.article = "As a";
     this.actor = "User";
     this.verb = "I want to";
@@ -23,6 +25,7 @@ export class Story {
 
   public id: StoryId;
   public name: string;
+  public title: string;
   public article: string;
   public actor: string;
   public verb: string;

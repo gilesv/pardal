@@ -1,5 +1,10 @@
 .task-list {
   .task-item + .task-item {
-    margin-top: 6px;
+    margin-top: 18px;
+  }
+
+  &__header {
+    text-align: right;
+    margin-bottom: 15px;
   }
 }

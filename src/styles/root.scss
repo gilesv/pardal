@@ -8,15 +8,18 @@ $primary: #6600ff;
 
 $lightgray: #cfd0d1;
 $lightpurple: #d8c1fb;
+$darkpurple: #5107bf;
 
 @import "./components/app";
 @import "./components/dashboard";
 @import "./components/story-details";
+@import "./components/story-form";
 @import "./components/story-list";
 @import "./components/story-list-item";
 @import "./components/collapsible-card";
 @import "./components/task-list";
 @import "./components/task-item";
+@import "./components/task-form";
 
 // resets
 button.bp3-button {
@@ -25,5 +28,28 @@ button.bp3-button {
 
 span.bp3-tag.bp3-minimal {
   background-color: lavender !important;
-  color: $primary !important;
+  color: $darkpurple !important;
+}
+
+button svg[data-icon*="chevron"] {
+  width: 12px;
+}
+
+.bp3-icon {
+  color: $darkpurple !important;
+}
+
+.bp3-datepicker {
+  .DayPicker-Day.DayPicker-Day--selected {
+    background-color: $primary;
+
+    &:hover {
+      background-color: $darkpurple;
+    }
+  }
+}
+
+[class*="bp3-"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px $darkpurple;
 }

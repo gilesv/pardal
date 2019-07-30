@@ -3,15 +3,15 @@ import { TeamMemberId } from "./team-member.entity";
 export type TaskId = number;
 
 export enum TaskType {
-  TASK = "Task",
-  ENH = "Enhancement",
-  BUG = "Bug"
+  TASK = "TASK",
+  ENH = "ENH",
+  BUG = "BUG"
 };
 
 export class Task {
-  constructor(id: TaskId) {
+  constructor(id: TaskId, type?: TaskType) {
     this.id = id;
-    this.type = TaskType.TASK;
+    this.type = type || TaskType.TASK;
     this.title = "New item";
     this.priority = 1.0;
     this.effort = 1.0;

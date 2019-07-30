@@ -1,0 +1,57 @@
+.task-form {
+  margin-top: 12px;
+
+  .label {
+    border: 1px solid transparent;
+    outline: none;
+    padding: 5px;
+    margin: 0 5px;
+
+    &:first-child {
+      padding-left: 0;
+      margin-left: 0;
+    }
+    &:hover, &:focus {
+      border-color: $lightgray;
+      background-color: #fff;
+    }
+  }
+
+  .field {
+    width: fit-content;
+  }
+
+  &__row {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+
+    & > * {
+      margin-right: 25px;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    font-family: Fira Code;
+    min-height: 100px;
+
+    &:focus {
+      min-height: 300px;
+    }
+  }
+
+  .bp3-numeric-input input {
+    width: 50px;
+  }
+
+  .bp3-input-group .bp3-icon-calendar + input {
+    width: 125px;
+  }
+
+  .title {
+    .bp3-form-content {
+      width: 100%;
+    }
+  }
+}
