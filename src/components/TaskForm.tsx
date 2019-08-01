@@ -1,15 +1,16 @@
 import React from "react";
 import { FormGroup, InputGroup, NumericInput, TextArea, HTMLSelect } from "@blueprintjs/core";
 import { DateInput } from "@blueprintjs/datetime";
-import { Task, TaskType } from "../entities/task.entity";
+import { Task, TaskType, TaskArea, Assignee } from "../entities/task.entity";
 
 interface Props {
   task: Task,
-  update: (key: string, value: any) => void
+  update: (key: string, value: any) => void,
+  updateEffort: (n: number, s: string) => void
 }
 
 const TaskForm = (props: Props) => {
-  const { task, update } = props;
+  const { task, update, updateEffort } = props;
 
   return (
     <div className="task-form">
@@ -25,17 +26,22 @@ const TaskForm = (props: Props) => {
       <div className="task-form__row">
         <FormGroup label="Assignee">
           <HTMLSelect
-            options={["A1", "A2", "A3", "A4", "A5"]}
+            options={Object.values(Assignee)}
             onChange={(e) => update('assignee', e.currentTarget.value)}
             value={task.assignee} />
         </FormGroup>
 
-        <FormGroup label="Priority">
-          <NumericInput id="priority" allowNumericCharactersOnly={false} value={task.priority} max={5.0} min={1.0} onValueChange={(n) => update('priority', n)} />
+        <FormGroup label="Effort">
+          <NumericInput
+            allowNumericCharactersOnly={false}
+            min={0.1}
+            value={task.effort}
+            buttonPosition={"none"}
+            onValueChange={(n, s) => updateEffort(n, s)} />
         </FormGroup>
 
-        <FormGroup label="Effort">
-          <NumericInput id="effort" allowNumericCharactersOnly={false} value={task.effort} max={5.0} min={1.0} onValueChange={(n) => update('effort', n)} />
+        <FormGroup label="Priority">
+          <NumericInput value={task.priority} max={5.0} min={1.0} onValueChange={(n) => update('priority', n)} />
         </FormGroup>
 
         <FormGroup label="Kick-start date">
@@ -63,6 +69,13 @@ const TaskForm = (props: Props) => {
             options={[{ label: "Task", value: TaskType.TASK }, { label: "Enhancement", value: TaskType.ENH }, { label: "Bug", value: TaskType.BUG }]}
             onChange={(e) => update('type', e.currentTarget.value)}
             value={task.type} />
+        </FormGroup>
+
+        <FormGroup label="Area">
+          <HTMLSelect
+            options={[{ label: "Frontend", value: TaskArea.FE }, { label: "Backend", value: TaskArea.BE }, { label: "FE & BE", value: TaskArea.BOTH }]}
+            onChange={(e) => update('area', e.currentTarget.value)}
+            value={task.area} />
         </FormGroup>
 
       </div>

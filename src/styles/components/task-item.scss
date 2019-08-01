@@ -1,3 +1,29 @@
 .task-item {
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.2);
+  background-color: white;
+  border-radius: 3px;
+  padding: 8px;
 
+  &__header {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-family: Fira Code;
+  }
+
+  &__tags {
+    .bp3-tag {
+      font-size: 11px;
+      margin-right: 10px;
+    }
+  }
+
+  &__body {
+    padding: 15px;
+  }
 }
