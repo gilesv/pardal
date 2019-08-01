@@ -1,8 +1,25 @@
 import React from "react";
 import StoryList from "./StoryList";
 import StoryDetails from "./StoryDetails";
+import { exportStory, FileType } from "../services/trader.service";
+import { IStore } from "../redux/reducers";
+import { connect } from "react-redux";
+import { download } from "../services/file.service";
 
-export default class Dashboard extends React.Component {
+class Dashboard extends React.Component<IStore> {
+  constructor(props: IStore) {
+    super(props);
+
+    this.exportStory = this.exportStory.bind(this);
+  }
+
+  public exportStory(fileType: FileType) {
+    const storyIndex = this.props.ui.selectedStory;
+    const story = this.props.stories.entities[this.props.stories.ids[storyIndex]];
+    const result = exportStory(story, fileType, this.props);
+    download(story.name, fileType, result);
+  }
+
   render() {
     return (
       <div className="app">
@@ -16,7 +33,7 @@ export default class Dashboard extends React.Component {
           </aside>
 
           <main>
-            <StoryDetails />
+            <StoryDetails exportStory={this.exportStory} />
           </main>
         </div>
 
@@ -24,3 +41,9 @@ export default class Dashboard extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state: IStore): IStore => {
+  return state;
+}
+
+export default connect(mapStateToProps)(Dashboard);

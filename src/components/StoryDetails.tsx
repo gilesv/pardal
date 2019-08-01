@@ -1,19 +1,20 @@
-import React, { RefObject, KeyboardEvent, SyntheticEvent } from "react";
+import React, { RefObject, KeyboardEvent } from "react";
 import TaskList from "./TaskList";
 import { IStore } from "../redux/reducers";
 import { connect } from "react-redux";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
-import { Button, FormGroup, InputGroup, NumericInput, TextArea, Tag, NonIdealState, Position } from "@blueprintjs/core";
+import { Button, Tag, Menu, Popover, Position } from "@blueprintjs/core";
 import { Story } from "../entities/story.entity";
 import { TaskId, Task } from "../entities/task.entity";
-import { updateStory, addTask } from "../redux/actions";
-import { DateInput } from "@blueprintjs/datetime";
+import { updateStory } from "../redux/actions";
 import StoryForm from "./StoryForm";
+import { exportStory, FileType } from "../services/trader.service";
 
 interface Props {
   selectedStory: Story,
   tasks: { [key: number]: Task },
   tasksIds: TaskId[],
+  exportStory: (fileType: FileType) => void,
   [key: string]: any
 }
 
@@ -29,7 +30,7 @@ class StoryDetails extends React.Component<Props> {
 
   public updateStoryName(e: ContentEditableEvent) {
     const name = e.target.value.trim() || "";
-    const updated = { ...this.props.selectedStory, name }
+    const updated = { ...this.props.selectedStory, name };
     this.props.dispatch(updateStory(updated));
   }
 
@@ -49,6 +50,13 @@ class StoryDetails extends React.Component<Props> {
   render() {
     const { selectedStory } = this.props;
 
+    const exportMenu = (
+      <Menu>
+        <Menu.Item text="To JSON file" onClick={() => this.props.exportStory(FileType.JSON)} />
+        <Menu.Item text="To Radar export file" onClick={() => this.props.exportStory(FileType.DTD)} />
+      </Menu>
+    );
+
     return (
       <div className="story-details">
         {
@@ -66,7 +74,9 @@ class StoryDetails extends React.Component<Props> {
                 </div>
 
                 <div className="story-details__controls">
-                  <Button intent="none" text="Export" icon="export" rightIcon="caret-down" />
+                  <Popover content={exportMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
+                    <Button intent="none" text="Export" icon="export" rightIcon="caret-down" />
+                  </Popover>
                 </div>
               </div>
 
