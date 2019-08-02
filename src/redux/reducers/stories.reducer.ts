@@ -27,17 +27,15 @@ export default function storiesReducer(
 }
 
 const addStory = (state: IEntityMap<Story>, payload: any) => {
-  const nextId = state.ids.length;
   const { story } = payload;
-  story.id = nextId;
 
   return {
     ...state,
     entities: {
       ...state.entities,
-      [nextId]: story,
+      [story.id]: story,
     },
-    ids: [...state.ids, nextId]
+    ids: [...state.ids, story.id]
   }
 }
 

@@ -1,10 +1,11 @@
 import React, { SyntheticEvent } from "react";
 import StoryListItem from "./StoryListItem";
 import { addStory, removeStory, updateStory, selectStory } from "../redux/actions";
-import { Button, NonIdealState } from "@blueprintjs/core";
+import { Button, NonIdealState, FileInput } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../redux/reducers";
 import { Story, StoryId } from "../entities/story.entity";
+import FileSelector from "./FileSelector";
 
 interface Props {
   story: { [key: number]: Story },
@@ -56,13 +57,14 @@ class StoryList extends React.Component<Props> {
   }
 
   render() {
-    const { stories, storiesIds, selectedStory } = this.props;
+    const { stories, storiesIds, selectedStory, importStory } = this.props;
 
     return (
       <div className="story-list">
         <div className="story-list__header">
           <h1>Stories</h1>
           <Button text="Add Story" icon="cube-add" intent="success" onClick={(e: SyntheticEvent) => this.addStory()} />
+          <FileSelector importStory={importStory} />
         </div>
 
         <div className="story-list__body">

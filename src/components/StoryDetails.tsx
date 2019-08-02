@@ -8,7 +8,7 @@ import { Story } from "../entities/story.entity";
 import { TaskId, Task } from "../entities/task.entity";
 import { updateStory } from "../redux/actions";
 import StoryForm from "./StoryForm";
-import { exportStory, FileType } from "../services/trader.service";
+import { FileType } from "../services/trader.service";
 
 interface Props {
   selectedStory: Story,

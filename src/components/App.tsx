@@ -1,7 +1,7 @@
 import React from "react";
 import StoryList from "./StoryList";
 import StoryDetails from "./StoryDetails";
-import { exportStory, FileType } from "../services/trader.service";
+import Trader, { FileType } from "../services/trader.service";
 import { IStore } from "../redux/reducers";
 import { connect } from "react-redux";
 import { download } from "../services/file.service";
@@ -11,13 +11,23 @@ class Dashboard extends React.Component<IStore> {
     super(props);
 
     this.exportStory = this.exportStory.bind(this);
+    this.importStory = this.importStory.bind(this);
   }
 
   public exportStory(fileType: FileType) {
     const storyIndex = this.props.ui.selectedStory;
     const story = this.props.stories.entities[this.props.stories.ids[storyIndex]];
-    const result = exportStory(story, fileType, this.props);
+    const result = Trader.exportStory(story, fileType);
     download(story.name, fileType, result);
+  }
+
+  public importStory(e: any) {
+    const reader = new FileReader();
+    const file: File = e.target.files[0];
+    reader.onload = (e: any) => {
+      Trader.importStory(e.target.result, FileType.JSON);
+    }
+    reader.readAsBinaryString(file);
   }
 
   render() {
@@ -29,7 +39,7 @@ class Dashboard extends React.Component<IStore> {
 
         <div className="dashboard">
           <aside>
-            <StoryList />
+            <StoryList importStory={this.importStory} />
           </aside>
 
           <main>
