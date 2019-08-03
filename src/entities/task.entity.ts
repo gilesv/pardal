@@ -3,7 +3,8 @@ export type TaskId = number;
 export enum TaskType {
   TASK = "TASK",
   ENH = "ENH",
-  BUG = "BUG"
+  BUG = "BUG",
+  TEST = "TEST"
 };
 
 export enum TaskArea {

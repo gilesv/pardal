@@ -22,36 +22,36 @@ class Trader {
       case FileType.JSON:
         return this.exportStoryToJSON(story, state);
         break;
-  
+
       case FileType.DTD:
         return this.exportStoryToDTD(story, state);
         break;
-  
+
       default:
         throw new Error("Invalid export file type");
     }
   }
 
   private exportStoryToJSON(story: Story, state: IStore) {
-    return JSON.stringify({ 
+    return JSON.stringify({
       story: {
         ...story,
         tasks: story.tasks.map(taskId => state.tasks.entities[taskId])
-      } 
+      }
     }, null, 3);
   }
 
   private exportStoryToDTD(story: Story, state: IStore) {
     const tasks = story.tasks.map(taskId => state.tasks.entities[taskId]);
     let dtdContent = this.storyToDTDFormat(story);
-  
+
     for (let task of tasks) {
       dtdContent += "\n" + this.taskToDTDFormat(task, story.name);
     }
-  
+
     return dtdContent;
   }
-  
+
   private storyToDTDFormat(story: Story): string {
     return [
       `[STORY][${story.name}] ${story.title}`,
@@ -60,53 +60,53 @@ class Trader {
       `[DESCRIPTION]:\n${this.descriptionToTopics(story.description)}`
     ].join("\n");
   }
-  
+
   private taskToDTDFormat(task: Task, storyName: string): string {
     return [
-      `[TASK][${storyName}][${task.area === TaskArea.BOTH ? 'BE][FE' : task.area}][${task.assignee}] ${task.title}`,
+      `[${task.type}][${storyName}][${task.area === TaskArea.BOTH ? 'BE][FE' : task.area}][${task.assignee}] ${task.title}`,
       `[PRIORITY]: ${task.priority}`,
       `[EFFORT]: ${task.effort}`,
       `[DESCRIPTION]:\n${this.descriptionToTopics(task.description)}`
     ].join("\n");
   }
-  
+
   private descriptionToTopics(description: string) {
     let result = "";
     const lines = description.split("\n").map(l => l.trim()).filter(l => l.length > 0);
-  
+
     for (let line of lines) {
       if (line[0] !== "-") {
         line = "- " + line;
       }
-  
+
       if (![":", ";", "."].includes(line[line.length - 1])) {
         line += ";"
       }
-  
+
       result += line + "\n";
     }
-  
+
     return result;
   }
-  
-  importStory(source: string, from: FileType) {
+
+  importStory(source: string, from: FileType): string {
     const obj = this.toObjectTree(source);
     const nextStoryId = this.store.getState().stories.ids.length;
 
     try {
       this.importStoryToStore(obj.story, nextStoryId);
       this.importTasksToStore(obj.story.tasks, nextStoryId)
+
+      return obj.story.name;
     } catch (e) {
       throw new Error("Invalid JSON content: " + e.message);
     }
-
-    console.log('Exported successfully');
   }
-  
+
   private importStoryToStore(storyObj: any, nextId: StoryId) {
     try {
       const story = new Story(nextId, storyObj.name);
-    
+
       story.title = storyObj.title;
       story.description = storyObj.description;
       story.effort = storyObj.effort;
@@ -120,7 +120,7 @@ class Trader {
       throw new Error("incomplete story data. " + e.message);
     }
   }
-  
+
   private parseDate(dateStr: string): Date {
     if (isNaN(Date.parse(dateStr))) {
       throw new Error(`could not parse date: '${dateStr}'`);
@@ -160,7 +160,7 @@ class Trader {
       this.store.dispatch(addTask(task, storyId));
     }
   }
-  
+
   private toObjectTree(source: string): any {
     try {
       return JSON.parse(source);

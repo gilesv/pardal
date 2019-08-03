@@ -66,18 +66,20 @@ const TaskForm = (props: Props) => {
 
         <FormGroup label="Type">
           <HTMLSelect
-            options={[{ label: "Task", value: TaskType.TASK }, { label: "Enhancement", value: TaskType.ENH }, { label: "Bug", value: TaskType.BUG }]}
+            options={[{ label: "Task", value: TaskType.TASK }, { label: "Enhancement", value: TaskType.ENH }, { label: "Test", value: TaskType.TEST }]}
             onChange={(e) => update('type', e.currentTarget.value)}
             value={task.type} />
         </FormGroup>
 
-        <FormGroup label="Area">
-          <HTMLSelect
-            options={[{ label: "Frontend", value: TaskArea.FE }, { label: "Backend", value: TaskArea.BE }, { label: "FE & BE", value: TaskArea.BOTH }]}
-            onChange={(e) => update('area', e.currentTarget.value)}
-            value={task.area} />
-        </FormGroup>
-
+        {
+          task.type !== TaskType.TEST ?
+            <FormGroup label="Area">
+              <HTMLSelect
+                options={[{ label: "Frontend", value: TaskArea.FE }, { label: "Backend", value: TaskArea.BE }, { label: "FE & BE", value: TaskArea.BOTH }]}
+                onChange={(e) => update('area', e.currentTarget.value)}
+                value={task.area} />
+            </FormGroup> : null
+        }
       </div>
 
       <FormGroup label="Description">

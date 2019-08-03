@@ -2,18 +2,19 @@ import { FileInput, Button } from "@blueprintjs/core";
 import React from "react";
 
 interface Props {
-  importStory: Function
+  importStory: Function,
+  ref: React.RefObject<{}>
 }
 
 const FileSelector = (props: Props) => {
-  const { importStory } = props;
+  const { importStory, ref } = props;
   return (
-    <label>
-      <Button text="Import" icon="import" />
-      <FileInput
-        onInputChange={(e) => importStory(e)}
-        inputProps={{style: {display: "none"}}} />
-    </label>
+    <div>
+      <div className="file-selector">
+        Import from JSON
+
+      </div>
+    </div>
   );
 }
 

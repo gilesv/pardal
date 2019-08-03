@@ -38,7 +38,7 @@ class TaskList extends React.Component<Props> {
       <Menu>
         <Menu.Item text="Task" onClick={() => this.addTask()} />
         <Menu.Item text="Enhancement" onClick={() => this.addTask(TaskType.ENH)} />
-        <Menu.Item text="Bug" onClick={() => this.addTask(TaskType.BUG)} />
+        <Menu.Item text="Test" onClick={() => this.addTask(TaskType.TEST)} />
       </Menu>
     );
     return (

@@ -16,17 +16,17 @@ import tasksReducer from "./tasks.reducer";
 export interface IStore {
   ui: IUiState,
   // sprints: IEntityMap<Sprint>,
-  teams: IEntityMap<Team>,
-  teamMembers: IEntityMap<TeamMember>,
+  // teams: IEntityMap<Team>,
+  // teamMembers: IEntityMap<TeamMember>,
   stories: IEntityMap<Story>,
   tasks: IEntityMap<Task>
 }
 
 export default combineReducers({
   ui: uiReducer,
-  // sprints: sprintsReducer,
-  teams: teamsReducer,
-  teamMembers: teamMembersReducer,
   stories: storiesReducer,
   tasks: tasksReducer
+  // sprints: sprintsReducer,
+  // teams: teamsReducer,
+  // teamMembers: teamMembersReducer,
 });

@@ -4,10 +4,12 @@ import { TeamMember, TeamMemberId } from "../entities/team-member.entity";
 import IAction from "./utils/action.interface";
 import { Story, StoryId } from "../entities/story.entity";
 import { Task, TaskId } from "../entities/task.entity";
+import Notification from "../entities/notification.entity";
 
 export enum ActionType {
   // UI
   SELECT_STORY,
+  ADD_NOTIFICATION,
 
   // Team
   ADD_TEAM,
@@ -46,6 +48,13 @@ export function selectStory(storyIndex: number): IAction {
     type: ActionType.SELECT_STORY,
     payload: { storyIndex }
   };
+}
+
+export function addNotification(notification: Notification): IAction {
+  return {
+    type: ActionType.ADD_NOTIFICATION,
+    payload: { notification }
+  }
 }
 
 /**

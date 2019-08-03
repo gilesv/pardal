@@ -1,11 +1,10 @@
 import React, { SyntheticEvent } from "react";
 import StoryListItem from "./StoryListItem";
-import { addStory, removeStory, updateStory, selectStory } from "../redux/actions";
-import { Button, NonIdealState, FileInput } from "@blueprintjs/core";
+import { addStory, removeStory, selectStory } from "../redux/actions";
+import { Button, NonIdealState, Menu, ButtonGroup, Popover, Position } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../redux/reducers";
 import { Story, StoryId } from "../entities/story.entity";
-import FileSelector from "./FileSelector";
 
 interface Props {
   story: { [key: number]: Story },
@@ -16,8 +15,13 @@ interface Props {
 };
 
 class StoryList extends React.Component<Props> {
+  public fileSelector: React.RefObject<HTMLInputElement>;
+
   constructor(props: Props) {
     super(props);
+    this.fileSelector = React.createRef();
+    this.addStory = this.addStory.bind(this);
+    this.clickFileSelector = this.clickFileSelector.bind(this);
   }
 
   public addStory() {
@@ -56,15 +60,42 @@ class StoryList extends React.Component<Props> {
     this.props.dispatch(selectStory(index));
   }
 
+  public clickFileSelector() {
+    const el = this.fileSelector.current;
+    if (el) {
+      el.value = "";
+      el.click();
+    }
+  }
+
   render() {
-    const { stories, storiesIds, selectedStory, importStory } = this.props;
+    const { storiesIds, selectedStory, importStory } = this.props;
+
+    const addStoryMenu = (
+      <Menu>
+        <Menu.Item text="New" icon="plus" onClick={this.addStory} />
+        <Menu.Item text="Import from JSON..." icon="import" onClick={this.clickFileSelector} />
+      </Menu>
+    );
 
     return (
       <div className="story-list">
+
+        <input
+          className="story-list__file-selector"
+          type="file"
+          ref={this.fileSelector}
+          onChange={(e) => importStory(e)}
+          accept=".json, application/json" />
+
         <div className="story-list__header">
           <h1>Stories</h1>
-          <Button text="Add Story" icon="cube-add" intent="success" onClick={(e: SyntheticEvent) => this.addStory()} />
-          <FileSelector importStory={importStory} />
+          <ButtonGroup>
+            <Button text="Add Story" icon="cube-add" intent="success" onClick={this.addStory} />
+            <Popover content={addStoryMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
+              <Button intent="success" rightIcon="caret-down" />
+            </Popover>
+          </ButtonGroup>
         </div>
 
         <div className="story-list__body">
