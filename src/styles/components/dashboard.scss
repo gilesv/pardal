@@ -6,10 +6,12 @@
   
   aside {
     flex-basis: 27%;
+    flex-grow: 1;
   }
 
   main {
     flex-basis: 70%;
+    margin-left: 20px;
   }
 
   @media (max-width: 900px) {
@@ -17,6 +19,10 @@
 
     aside {
       margin-top: 10px;
+    }
+
+    main {
+      margin-left: 0;
     }
   }
 }

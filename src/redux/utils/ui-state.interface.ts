@@ -1,7 +1,5 @@
-import Notification from "../../entities/notification.entity";
-
 export default interface IUiState {
   selectedStory: number,
-  notifications: Notification[],
+  isDirty: boolean, // true if user made changes without exporting them
   [key: string]: any
 }

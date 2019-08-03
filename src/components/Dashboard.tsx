@@ -5,16 +5,16 @@ import Trader, { FileType } from "../services/trader.service";
 import { IStore } from "../redux/reducers";
 import { connect } from "react-redux";
 import { download } from "../services/file.service";
-import { Toaster, Toast } from "@blueprintjs/core";
 import Notification from "../entities/notification.entity";
 import { Story } from "../entities/story.entity";
 import IEntityMap from "../redux/utils/entity-map.interface";
-import { addNotification } from "../redux/actions";
+import NotifyDock from "./NotifyDock";
+import { setStateClean } from "../redux/actions";
 
 interface Props {
   selectedStory: number,
-  notifications: Notification[],
   stories: IEntityMap<Story>,
+  isStateDirty: boolean,
   [key: string]: any
 }
 
@@ -26,16 +26,29 @@ class Dashboard extends React.Component<Props> {
     this.importStory = this.importStory.bind(this);
   }
 
+  public componentDidMount() {
+    const { isStateDirty } = this.props;
+    window.onbeforeunload = (e: any) => {
+      if (isStateDirty) {
+        return "";
+      } else {
+        return null;
+      }
+    };
+  }
+
+  private notify(notification: Notification) {
+    NotifyDock.show(notification);
+  }
+
   public exportStory(fileType: FileType) {
     const storyIndex = this.props.selectedStory;
     const story = this.props.stories.entities[this.props.stories.ids[storyIndex]];
     const result = Trader.exportStory(story, fileType);
 
-    this.props.dispatch(
-      addNotification(new Notification("The file download will begin shortly.", "success"))
-    );
-
-    setTimeout(() => download(story.name, fileType, result), 2000);
+    this.notify(new Notification("Your download will begin shortly.", "download"));
+    setTimeout(() => download(story.name, fileType, result), 1500);
+    this.props.dispatch(setStateClean());
   }
 
   public importStory(e: any) {
@@ -45,29 +58,24 @@ class Dashboard extends React.Component<Props> {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         let notification;
+
         try {
           const storyName = Trader.importStory(e.target.result, FileType.JSON);
-          notification = new Notification(`"${storyName}" was imported successfully.`, "success")
+          notification = new Notification(`"${storyName}" was imported successfully.`, "tick")
         } catch (e) {
-          notification = new Notification(`${e.message}`, "danger");
+          notification = new Notification(`${e.message}`, "error");
         }
 
-        this.props.dispatch(addNotification(notification));
+        this.notify(notification);
       }
       reader.readAsText(file);
     }
   }
 
   render() {
-    const { notifications } = this.props;
+    const { stories } = this.props;
     return (
       <div className="app">
-        <Toaster>
-          {
-            notifications.map((n: Notification) => <Toast message={n.message} intent={n.intent} timeout={n.timeout} />)
-          }
-        </Toaster>
-
         <header>
           <div className="app-title"> >=pardal<span>v0.0.1</span></div>
         </header>
@@ -77,9 +85,14 @@ class Dashboard extends React.Component<Props> {
             <StoryList importStory={this.importStory} />
           </aside>
 
-          <main>
-            <StoryDetails exportStory={this.exportStory} />
-          </main>
+          {
+            stories && stories.ids && stories.ids.length > 0 ?
+              <main>
+                <StoryDetails exportStory={this.exportStory} />
+              </main>
+              : null
+          }
+
         </div>
 
       </div>
@@ -90,8 +103,8 @@ class Dashboard extends React.Component<Props> {
 const mapStateToProps = (state: IStore, props: any): Props => {
   return {
     selectedStory: state.ui.selectedStory,
-    notifications: state.ui.notifications,
     stories: state.stories,
+    isStateDirty: state.ui.isDirty,
     ...props
   };
 }
