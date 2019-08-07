@@ -53,7 +53,7 @@ class StoryDetails extends React.Component<Props> {
     const exportMenu = (
       <Menu>
         <Menu.Item text="To JSON file" onClick={() => this.props.exportStory(FileType.JSON)} />
-        <Menu.Item text="To Radar export file" onClick={() => this.props.exportStory(FileType.DTD)} />
+        <Menu.Item text="To TXT file" onClick={() => this.props.exportStory(FileType.DTD)} />
       </Menu>
     );
 

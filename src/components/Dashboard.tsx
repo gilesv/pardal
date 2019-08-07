@@ -29,11 +29,7 @@ class Dashboard extends React.Component<Props> {
   public componentDidMount() {
     const { isStateDirty } = this.props;
     window.onbeforeunload = (e: any) => {
-      if (isStateDirty) {
-        return "";
-      } else {
-        return null;
-      }
+      return "";
     };
   }
 

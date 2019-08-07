@@ -28,7 +28,7 @@ const StoryForm = (props: Props) => {
         </FormGroup>
 
         <FormGroup label="Effort">
-          <NumericInput id="effort" value={story.effort} max={5.0} min={1.0} onValueChange={(n) => update('effort', n)} />
+          <NumericInput id="effort" value={story.effort} max={100.0} min={1.0} onValueChange={(n) => update('effort', n)} />
         </FormGroup>
 
         <FormGroup label="Kick-start date">
