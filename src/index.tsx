@@ -11,7 +11,7 @@ import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/datetime/lib/css/blueprint-datetime.css";
 import "./styles/root.scss";
 
-const version = "0.0.1";
+const version = "0.0.2";
 
 ReactDOM.render(
   <Provider store={store}>
