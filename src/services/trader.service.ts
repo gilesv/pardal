@@ -71,6 +71,10 @@ class Trader {
   }
 
   private descriptionToTopics(description: string) {
+    if (description.trim() === "") {
+      return "- N/A\n";
+    }
+
     let result = "";
     const lines = description.split("\n").map(l => l.trim()).filter(l => l.length > 0);
 
