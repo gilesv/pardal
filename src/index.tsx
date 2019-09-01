@@ -11,9 +11,11 @@ import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/datetime/lib/css/blueprint-datetime.css";
 import "./styles/root.scss";
 
+const version = "0.0.1";
+
 ReactDOM.render(
   <Provider store={store}>
-    <Dashboard />
+    <Dashboard pardalVersion={version} />
   </Provider>,
   document.getElementById('root')
 );

@@ -15,6 +15,7 @@ interface Props {
   selectedStory: number,
   stories: IEntityMap<Story>,
   isStateDirty: boolean,
+  pardalVersion: string,
   [key: string]: any
 }
 
@@ -69,15 +70,15 @@ class Dashboard extends React.Component<Props> {
   }
 
   render() {
-    const { stories } = this.props;
+    const { stories, pardalVersion } = this.props;
     return (
       <div className="app">
-        <header>
-          <div className="app-title"> >=pardal<span>v0.0.1</span></div>
-        </header>
-
         <div className="dashboard">
           <aside>
+            <header>
+              <div className="app-title"> >=pardal<span>v{pardalVersion}</span></div>
+            </header>
+
             <StoryList importStory={this.importStory} />
           </aside>
 

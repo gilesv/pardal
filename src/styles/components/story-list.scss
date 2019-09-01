@@ -20,8 +20,12 @@
   }
 
   &__body {
-    height: 300px;
+    
     overflow-y: auto;
+
+    @media (min-width: 900px) {
+      height: 300px;
+    }
   }
 
   &__add {
