@@ -1,7 +1,7 @@
 import { ActionType } from "../actions";
 import IEntityMap from "../utils/entity-map.interface";
 import IAction from "../utils/action.interface";
-import { removeFromArray, removeFromObject } from "../utils/store.utils";
+import { removeFromArray, removeFromObject, addToArray } from "../utils/store.utils";
 import { Task } from "../../entities/task.entity";
 
 export default function tasksReducer(
@@ -31,7 +31,7 @@ const addTask = (state: IEntityMap<Task>, payload: any) => {
       ...state.entities,
       [task.id]: task,
     },
-    ids: [...state.ids, task.id]
+    ids: addToArray(state.ids, task.id, -1)
   }
 }
 

@@ -6,6 +6,7 @@ import { Task, TaskId, TaskType } from "../entities/task.entity";
 import TaskItem from "./TaskItem";
 import { NonIdealState, Button, Popover, Position, ButtonGroup, Menu } from "@blueprintjs/core";
 import { addTask, updateTask } from "../redux/actions";
+import { CSSTransition } from "react-transition-group";
 
 interface Props {
   tasks: { [key: number]: Task },
@@ -22,10 +23,10 @@ class TaskList extends React.Component<Props> {
     this.updateTask = this.updateTask.bind(this);
   }
 
-  public addTask(type = TaskType.TASK) {
+  public addTask(type = TaskType.TASK, index = -1) {
     const id = this.props.tasksIds.length;
     const task = new Task(id, type);
-    this.props.dispatch(addTask(task, this.props.story.id));
+    this.props.dispatch(addTask(task, this.props.story.id, index));
   }
 
   public updateTask(task: Task) {
@@ -59,9 +60,14 @@ class TaskList extends React.Component<Props> {
         </div>
         {
           story && story.tasks && story.tasks.length > 0 ?
-            story.tasks.map(taskId => {
+            story.tasks.map((taskId, i) => {
               const task = this.props.tasks[taskId];
-              return <TaskItem key={`task#${taskId}`} task={task} updateTask={this.updateTask} />
+              return <TaskItem
+                key={`task#${taskId}`}
+                index={i}
+                task={task}
+                updateTask={this.updateTask}
+                addTaskAtIndex={(index) => this.addTask(TaskType.TASK, index)} />
             })
             : <NonIdealState
               className="story-details__nothing"
@@ -70,7 +76,6 @@ class TaskList extends React.Component<Props> {
               action={<Button intent="success" text="Add a task" icon="add-to-artifact" onClick={() => this.addTask()} />} />
         }
       </div>
-
     );
   }
 }

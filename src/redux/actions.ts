@@ -162,10 +162,10 @@ export function removeStory(storyId?: StoryId): IAction {
  * Actions for Task
  * ============================================
  */
-export function addTask(task: Task, storyId: StoryId): IAction {
+export function addTask(task: Task, storyId: StoryId, index: number = -1): IAction {
   return {
     type: ActionType.ADD_TASK,
-    payload: { task, storyId }
+    payload: { task, storyId, index }
   };
 }
 

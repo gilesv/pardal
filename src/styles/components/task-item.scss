@@ -3,6 +3,8 @@
   background-color: white;
   border-radius: 3px;
   padding: 8px;
+  position: relative;
+  animation: 3s 1 alternate task-border;
 
   &__header {
     padding: 10px;
@@ -25,5 +27,55 @@
 
   &__body {
     padding: 15px;
+  }
+
+  &__add-button {
+    position: absolute;
+    width: calc(100% + 22px);
+    cursor: pointer;
+    opacity: 0;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &.before {
+      top: -20px;
+      left: -22px;
+    }
+
+    &.after {
+      bottom: -9px;
+      left: -22px;
+    }
+
+    .button {
+      text-align: center;
+      background: #0f9960;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+  
+      .bp3-icon {
+        color: white !important;
+      }
+    }
+  
+    .line {
+      height: 1px;
+      width: 100%;
+      background: #0f9960;
+      margin-top: -10px;
+    }
+  }
+}
+
+@keyframes task-border {
+  from {
+    box-shadow: 0px 0px 5px #756dfd;
+  }
+
+  to {
+    box-shadow: 0px 0px 3px rgba(0,0,0,0.2);
   }
 }

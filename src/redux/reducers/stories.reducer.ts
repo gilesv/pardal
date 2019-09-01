@@ -1,7 +1,7 @@
 import { ActionType } from "../actions";
 import IEntityMap from "../utils/entity-map.interface";
 import IAction from "../utils/action.interface";
-import { removeFromArray, removeFromObject } from "../utils/store.utils";
+import { removeFromArray, removeFromObject, addToArray } from "../utils/store.utils";
 import { Story } from "../../entities/story.entity";
 
 export default function storiesReducer(
@@ -62,9 +62,9 @@ const removeStory = (state: IEntityMap<Story>, payload: any) => {
 }
 
 const addTaskToStory = (state: IEntityMap<Story>, payload: any) => {
-  const { task, storyId } = payload;
+  const { task, storyId, index } = payload;
   const story = state.entities[storyId];
-  story.tasks = story.tasks.concat(task.id);
+  story.tasks = addToArray(story.tasks, task.id, index);
 
   return {
     ...state,
