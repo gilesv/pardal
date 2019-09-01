@@ -20,6 +20,9 @@ $darkpurple: #5107bf;
 @import "./components/task-item";
 @import "./components/task-form";
 
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Fira+Code:400&display=swap');
+
 // resets
 button.bp3-button {
   font-size: 12px;
