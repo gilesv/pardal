@@ -15,9 +15,16 @@ export default class TaskItem extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
+    this.element = React.createRef();
     this.update = this.update.bind(this);
     this.updateEffort = this.updateEffort.bind(this);
     this.handleHeaderClick = this.handleHeaderClick.bind(this);
+  }
+
+  public element: any;
+
+  componentDidMount() {
+    this.element.current.scrollIntoView({ behavior: "smooth" });
   }
 
   public state = {
@@ -53,7 +60,7 @@ export default class TaskItem extends React.Component<Props> {
 
     return (
       <CSSTransition classNames="task" timeout={300} in={true}>
-        <div className="task-item">
+        <div className="task-item" ref={this.element}>
           <AddTaskButton type="before" visible={index === 0} index={index} addTask={(index: number) => addTaskAtIndex(index)} />
 
           <div className="task-item__header" onClick={this.handleHeaderClick}>
