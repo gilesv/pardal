@@ -6,11 +6,12 @@ import { Task, TaskType, TaskArea, Assignee } from "../entities/task.entity";
 interface Props {
   task: Task,
   update: (key: string, value: any) => void,
-  updateEffort: (n: number, s: string) => void
+  updateEffort: (n: number, s: string) => void,
+  showDates: boolean
 }
 
 const TaskForm = (props: Props) => {
-  const { task, update, updateEffort } = props;
+  const { task, update, updateEffort, showDates } = props;
 
   return (
     <div className="task-form">
@@ -24,11 +25,11 @@ const TaskForm = (props: Props) => {
       </FormGroup>
 
       <div className="task-form__row">
-        <FormGroup label="Assignee">
+        <FormGroup label="Type">
           <HTMLSelect
-            options={Object.values(Assignee)}
-            onChange={(e) => update('assignee', e.currentTarget.value)}
-            value={task.assignee} />
+            options={[{ label: "Task", value: TaskType.TASK }, { label: "Enhancement", value: TaskType.ENH }, { label: "Test", value: TaskType.TEST }]}
+            onChange={(e) => update('type', e.currentTarget.value)}
+            value={task.type} />
         </FormGroup>
 
         <FormGroup label="Effort">
@@ -44,31 +45,36 @@ const TaskForm = (props: Props) => {
           <NumericInput value={task.priority} max={5.0} min={1.0} onValueChange={(n) => update('priority', n)} />
         </FormGroup>
 
-        <FormGroup label="Kick-start date">
-          <DateInput
-            onChange={(newDate) => update('startDate', newDate)}
-            value={task.startDate}
-            formatDate={date => date.toLocaleDateString()}
-            parseDate={str => new Date(str)}
-            placeholder="M/D/YYYY"
-            inputProps={{ leftIcon: "calendar" }} />
-        </FormGroup>
+        {
+          showDates ?
+            <>
+              <FormGroup label="Kick-start date">
+                <DateInput
+                  onChange={(newDate) => update('startDate', newDate)}
+                  value={task.startDate}
+                  formatDate={date => date.toLocaleDateString()}
+                  parseDate={str => new Date(str)}
+                  placeholder="M/D/YYYY"
+                  inputProps={{ leftIcon: "calendar" }} />
+              </FormGroup>
 
-        <FormGroup label="Hand-off date">
-          <DateInput
-            onChange={(newDate) => update('handOffDate', newDate)}
-            value={task.handOffDate}
-            formatDate={date => date.toLocaleDateString()}
-            parseDate={str => new Date(str)}
-            placeholder="M/D/YYYY"
-            inputProps={{ leftIcon: "calendar" }} />
-        </FormGroup>
+              <FormGroup label="Hand-off date">
+                <DateInput
+                  onChange={(newDate) => update('handOffDate', newDate)}
+                  value={task.handOffDate}
+                  formatDate={date => date.toLocaleDateString()}
+                  parseDate={str => new Date(str)}
+                  placeholder="M/D/YYYY"
+                  inputProps={{ leftIcon: "calendar" }} />
+              </FormGroup>
+            </> : null
+        }
 
-        <FormGroup label="Type">
+        <FormGroup label="Assignee">
           <HTMLSelect
-            options={[{ label: "Task", value: TaskType.TASK }, { label: "Enhancement", value: TaskType.ENH }, { label: "Test", value: TaskType.TEST }]}
-            onChange={(e) => update('type', e.currentTarget.value)}
-            value={task.type} />
+            options={Object.values(Assignee)}
+            onChange={(e) => update('assignee', e.currentTarget.value)}
+            value={task.assignee} />
         </FormGroup>
 
         {

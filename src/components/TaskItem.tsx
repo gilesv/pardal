@@ -62,7 +62,7 @@ export default class TaskItem extends React.Component<Props> {
 
         <Collapse isOpen={this.state.isBodyVisible}>
           <div className="task-item__body">
-            <TaskForm task={task} update={this.update} updateEffort={this.updateEffort} />
+            <TaskForm task={task} update={this.update} updateEffort={this.updateEffort} showDates={false} />
           </div>
         </Collapse>
       </div>
