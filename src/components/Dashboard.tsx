@@ -6,16 +6,16 @@ import { IStore } from "../redux/reducers";
 import { connect } from "react-redux";
 import { download } from "../services/file.service";
 import Notification from "../entities/notification.entity";
-import { Story } from "../entities/story.entity";
+import { Story, StoryId } from "../entities/story.entity";
 import IEntityMap from "../redux/utils/entity-map.interface";
 import NotifyDock from "./NotifyDock";
 import { setStateClean } from "../redux/actions";
-
+import { importFromStorage, exportToStorage } from "../services/localStorage.service";
 interface Props {
   selectedStory: number,
   stories: IEntityMap<Story>,
   isStateDirty: boolean,
-  pardalVersion: string,
+  appVersion: string,
   [key: string]: any
 }
 
@@ -28,7 +28,21 @@ class Dashboard extends React.Component<Props> {
   }
 
   public componentDidMount() {
-    const { isStateDirty } = this.props;
+    const storageState = importFromStorage();
+
+    if (storageState) {
+      Trader.importStories(storageState, FileType.JSON);
+    }
+
+    setInterval(() => {
+      const json = Trader.exportStories(
+        this.props.stories.ids.map((storyId: StoryId) => this.props.stories.entities[storyId]),
+        FileType.JSON,
+        this.props.appVersion
+      );
+      exportToStorage(json)
+    }, 5000);
+
     window.onbeforeunload = (e: any) => {
       return "";
     };
@@ -41,7 +55,7 @@ class Dashboard extends React.Component<Props> {
   public exportStory(fileType: FileType) {
     const storyIndex = this.props.selectedStory;
     const story = this.props.stories.entities[this.props.stories.ids[storyIndex]];
-    const result = Trader.exportStory(story, fileType);
+    const result = Trader.exportStories([story], fileType, this.props.appVersion);
 
     this.notify(new Notification("Your download will begin shortly.", "download"));
     setTimeout(() => download(story.name, fileType, result), 1500);
@@ -57,7 +71,7 @@ class Dashboard extends React.Component<Props> {
         let notification;
 
         try {
-          const storyName = Trader.importStory(e.target.result, FileType.JSON);
+          const storyName = Trader.importStories(e.target.result, FileType.JSON);
           notification = new Notification(`"${storyName}" was imported successfully.`, "tick")
         } catch (e) {
           notification = new Notification(`${e.message}`, "error");
@@ -70,13 +84,13 @@ class Dashboard extends React.Component<Props> {
   }
 
   render() {
-    const { stories, pardalVersion } = this.props;
+    const { stories, appVersion } = this.props;
     return (
       <div className="app">
         <div className="dashboard">
           <aside>
             <header>
-              <div className="app-title"> >=pardal<span>v{pardalVersion}</span></div>
+              <div className="app-title"> >=pardal<span>v{appVersion}</span></div>
             </header>
 
             <StoryList importStory={this.importStory} />
