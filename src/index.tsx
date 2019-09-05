@@ -4,6 +4,7 @@ import Dashboard from './components/Dashboard';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import appVersion from './appVersion';
 
 // Styles
 import "normalize.css";
@@ -15,7 +16,7 @@ const version = "0.0.2";
 
 ReactDOM.render(
   <Provider store={store}>
-    <Dashboard pardalVersion={version} />
+    <Dashboard appVersion={appVersion} />
   </Provider>,
   document.getElementById('root')
 );

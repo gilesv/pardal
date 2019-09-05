@@ -1,12 +1,12 @@
 import { Story, StoryId } from "../entities/story.entity";
 import { IStore } from "../redux/reducers";
 import store from "../redux/store";
-import { TaskId, Task, TaskArea } from "../entities/task.entity";
+import { Task, TaskArea, TaskId } from "../entities/task.entity";
 import { addStory, addTask } from "../redux/actions";
 
 export enum FileType {
   JSON,
-  DTD
+  TXT
 }
 
 class Trader {
@@ -15,44 +15,54 @@ class Trader {
   constructor(store: any) {
     this.store = store;
   }
-  exportStory(story: Story, to: FileType): string {
+
+  exportStories(stories: Story[], to: FileType, version: string): string {
     const state = this.store.getState();
 
     switch (to) {
       case FileType.JSON:
-        return this.exportStoryToJSON(story, state);
-        break;
+        return this.exportStoriesToJSON(stories, state, version);
 
-      case FileType.DTD:
-        return this.exportStoryToDTD(story, state);
-        break;
+      case FileType.TXT:
+        return this.exportStoriesToTXT(stories, state);
 
       default:
         throw new Error("Invalid export file type");
     }
   }
 
-  private exportStoryToJSON(story: Story, state: IStore) {
+  private exportStoriesToJSON(stories: Story[], state: IStore, version: string) {
+    const plainStories = stories.map((story: any) => {
+      const storyObj = { ...story };
+      storyObj.tasks = story.tasks.map((taskId: TaskId) => state.tasks.entities[taskId]);
+
+      return storyObj;
+    })
+
     return JSON.stringify({
-      story: {
-        ...story,
-        tasks: story.tasks.map(taskId => state.tasks.entities[taskId])
-      }
+      v: version,
+      stories: plainStories
     }, null, 3);
   }
 
-  private exportStoryToDTD(story: Story, state: IStore) {
-    const tasks = story.tasks.map(taskId => state.tasks.entities[taskId]);
-    let dtdContent = this.storyToDTDFormat(story);
+  private exportStoriesToTXT(stories: Story[], state: IStore) {
+    const story = stories[0]; // no support for multiple stories txt exportation
 
-    for (let task of tasks) {
-      dtdContent += "\n" + this.taskToDTDFormat(task, story.name);
+    if (!story) {
+      throw new Error("No stories selected to export");
     }
 
-    return dtdContent;
+    const tasks = story.tasks.map(taskId => state.tasks.entities[taskId]);
+    let TXTContent = this.storyToTXTFormat(story);
+
+    for (let task of tasks) {
+      TXTContent += "\n" + this.taskToTXTFormat(task, story.name);
+    }
+
+    return TXTContent;
   }
 
-  private storyToDTDFormat(story: Story): string {
+  private storyToTXTFormat(story: Story): string {
     return [
       `[STORY][${story.name}] ${story.title}`,
       `[PRIORITY]: ${story.priority}`,
@@ -61,7 +71,7 @@ class Trader {
     ].join("\n");
   }
 
-  private taskToDTDFormat(task: Task, storyName: string): string {
+  private taskToTXTFormat(task: Task, storyName: string): string {
     return [
       `[${task.type}][${storyName}][${task.area === TaskArea.BOTH ? 'BE][FE' : task.area}][${task.assignee}] ${task.title}`,
       `[PRIORITY]: ${task.priority}`,
@@ -93,15 +103,34 @@ class Trader {
     return result;
   }
 
-  importStory(source: string, from: FileType): string {
+  importStories(source: string, from: FileType): string {
     const obj = this.toObjectTree(source);
-    const nextStoryId = this.store.getState().stories.ids.length;
+    const sourceVersion = obj.v;
 
     try {
-      this.importStoryToStore(obj.story, nextStoryId);
-      this.importTasksToStore(obj.story.tasks, nextStoryId)
+      switch (sourceVersion) {
+        case undefined:
+        case "0.0.2":
+          const nextStoryId = this.store.getState().stories.ids.length;
+          this.importStoryToStore(obj.story, nextStoryId);
+          this.importTasksToStore(obj.story.tasks, nextStoryId);
+          return obj.story.name;
 
-      return obj.story.name;
+        // case "next-version" <-- add new cases here if the json format changes in future versions
+
+        default: // current version
+          let labels: string[] = [];
+          obj.stories.forEach((storyObj: any) => {
+            const nextStoryId = this.store.getState().stories.ids.length;
+
+            this.importStoryToStore(storyObj, nextStoryId);
+            this.importTasksToStore(storyObj.tasks, nextStoryId);
+
+            labels.push(storyObj.name);
+          });
+
+          return labels.join(", ");
+      }
     } catch (e) {
       throw new Error("Invalid JSON content: " + e.message);
     }
@@ -118,19 +147,12 @@ class Trader {
       story.description = storyObj.description;
       story.startDate = this.parseDate(storyObj.startDate);
       story.handOffDate = this.parseDate(storyObj.handOffDate);
+      story.tasks = [];
 
       this.store.dispatch(addStory(story));
     } catch (e) {
       throw new Error("incomplete story data. " + e.message);
     }
-  }
-
-  private parseDate(dateStr: string): Date {
-    if (isNaN(Date.parse(dateStr))) {
-      throw new Error(`could not parse date: '${dateStr}'`);
-    } else {
-      return new Date(dateStr)
-    };
   }
 
   private importTasksToStore(tasksArray: any[], storyId: StoryId) {
@@ -163,6 +185,14 @@ class Trader {
     for (let task of newTasks) {
       this.store.dispatch(addTask(task, storyId));
     }
+  }
+
+  private parseDate(dateStr: string): Date {
+    if (isNaN(Date.parse(dateStr))) {
+      throw new Error(`could not parse date: '${dateStr}'`);
+    } else {
+      return new Date(dateStr)
+    };
   }
 
   private toObjectTree(source: string): any {
