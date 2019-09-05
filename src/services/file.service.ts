@@ -2,7 +2,7 @@ import { FileType } from "../services/trader.service";
 
 const Extension = {
   [FileType.JSON]: "json",
-  [FileType.DTD]: "txt"
+  [FileType.TXT]: "txt"
 };
 
 export function download(fileName: string, fileType: FileType, bytes: string) {

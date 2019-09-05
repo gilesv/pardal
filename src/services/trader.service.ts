@@ -6,7 +6,7 @@ import { addStory, addTask } from "../redux/actions";
 
 export enum FileType {
   JSON,
-  DTD
+  TXT
 }
 
 class Trader {
@@ -23,8 +23,8 @@ class Trader {
       case FileType.JSON:
         return this.exportStoriesToJSON(stories, state, version);
 
-      case FileType.DTD:
-        return this.exportStoriesToDTD(stories, state);
+      case FileType.TXT:
+        return this.exportStoriesToTXT(stories, state);
 
       default:
         throw new Error("Invalid export file type");
@@ -32,17 +32,20 @@ class Trader {
   }
 
   private exportStoriesToJSON(stories: Story[], state: IStore, version: string) {
-    stories.forEach((story: any) => {
-      story.tasks = story.tasks.map((taskId: TaskId) => state.tasks.entities[taskId]);
+    const plainStories = stories.map((story: any) => {
+      const storyObj = { ...story };
+      storyObj.tasks = story.tasks.map((taskId: TaskId) => state.tasks.entities[taskId]);
+
+      return storyObj;
     })
 
     return JSON.stringify({
       v: version,
-      stories
+      stories: plainStories
     }, null, 3);
   }
 
-  private exportStoriesToDTD(stories: Story[], state: IStore) {
+  private exportStoriesToTXT(stories: Story[], state: IStore) {
     const story = stories[0]; // no support for multiple stories txt exportation
 
     if (!story) {
@@ -50,16 +53,16 @@ class Trader {
     }
 
     const tasks = story.tasks.map(taskId => state.tasks.entities[taskId]);
-    let dtdContent = this.storyToDTDFormat(story);
+    let TXTContent = this.storyToTXTFormat(story);
 
     for (let task of tasks) {
-      dtdContent += "\n" + this.taskToDTDFormat(task, story.name);
+      TXTContent += "\n" + this.taskToTXTFormat(task, story.name);
     }
 
-    return dtdContent;
+    return TXTContent;
   }
 
-  private storyToDTDFormat(story: Story): string {
+  private storyToTXTFormat(story: Story): string {
     return [
       `[STORY][${story.name}] ${story.title}`,
       `[PRIORITY]: ${story.priority}`,
@@ -68,7 +71,7 @@ class Trader {
     ].join("\n");
   }
 
-  private taskToDTDFormat(task: Task, storyName: string): string {
+  private taskToTXTFormat(task: Task, storyName: string): string {
     return [
       `[${task.type}][${storyName}][${task.area === TaskArea.BOTH ? 'BE][FE' : task.area}][${task.assignee}] ${task.title}`,
       `[PRIORITY]: ${task.priority}`,
@@ -144,19 +147,12 @@ class Trader {
       story.description = storyObj.description;
       story.startDate = this.parseDate(storyObj.startDate);
       story.handOffDate = this.parseDate(storyObj.handOffDate);
+      story.tasks = [];
 
       this.store.dispatch(addStory(story));
     } catch (e) {
       throw new Error("incomplete story data. " + e.message);
     }
-  }
-
-  private parseDate(dateStr: string): Date {
-    if (isNaN(Date.parse(dateStr))) {
-      throw new Error(`could not parse date: '${dateStr}'`);
-    } else {
-      return new Date(dateStr)
-    };
   }
 
   private importTasksToStore(tasksArray: any[], storyId: StoryId) {
@@ -189,6 +185,14 @@ class Trader {
     for (let task of newTasks) {
       this.store.dispatch(addTask(task, storyId));
     }
+  }
+
+  private parseDate(dateStr: string): Date {
+    if (isNaN(Date.parse(dateStr))) {
+      throw new Error(`could not parse date: '${dateStr}'`);
+    } else {
+      return new Date(dateStr)
+    };
   }
 
   private toObjectTree(source: string): any {

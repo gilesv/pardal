@@ -11,6 +11,8 @@ import IEntityMap from "../redux/utils/entity-map.interface";
 import NotifyDock from "./NotifyDock";
 import { setStateClean } from "../redux/actions";
 import { importFromStorage, exportToStorage } from "../services/localStorage.service";
+import SaveInfo from "./SaveInfo";
+
 interface Props {
   selectedStory: number,
   stories: IEntityMap<Story>,
@@ -28,28 +30,35 @@ class Dashboard extends React.Component<Props> {
   }
 
   public componentDidMount() {
+    this.restorePreviousWork();
+    this.saveProgress();
+  }
+
+  private restorePreviousWork() {
     const storageState = importFromStorage();
 
     if (storageState) {
       Trader.importStories(storageState, FileType.JSON);
+      this.props.dispatch(setStateClean());
+
+      this.notify(new Notification("Your work was restored!", "tick"));
     }
-
-    setInterval(() => {
-      const json = Trader.exportStories(
-        this.props.stories.ids.map((storyId: StoryId) => this.props.stories.entities[storyId]),
-        FileType.JSON,
-        this.props.appVersion
-      );
-      exportToStorage(json)
-    }, 5000);
-
-    window.onbeforeunload = (e: any) => {
-      return "";
-    };
   }
 
-  private notify(notification: Notification) {
-    NotifyDock.show(notification);
+  private saveProgress() {
+    setInterval(() => {
+      if (this.props.isStateDirty) {
+        const json = Trader.exportStories(
+          this.props.stories.ids.map((storyId: StoryId) => this.props.stories.entities[storyId]),
+          FileType.JSON,
+          this.props.appVersion
+        );
+
+        exportToStorage(json);
+        this.props.dispatch(setStateClean());
+        console.log("Progress saved.");
+      }
+    }, 2500);
   }
 
   public exportStory(fileType: FileType) {
@@ -58,7 +67,8 @@ class Dashboard extends React.Component<Props> {
     const result = Trader.exportStories([story], fileType, this.props.appVersion);
 
     this.notify(new Notification("Your download will begin shortly.", "download"));
-    setTimeout(() => download(story.name, fileType, result), 1500);
+
+    setTimeout(() => download(story.name, fileType, result), 1000);
     this.props.dispatch(setStateClean());
   }
 
@@ -83,8 +93,12 @@ class Dashboard extends React.Component<Props> {
     }
   }
 
+  private notify(notification: Notification) {
+    NotifyDock.show(notification);
+  }
+
   render() {
-    const { stories, appVersion } = this.props;
+    const { stories, appVersion, isStateDirty } = this.props;
     return (
       <div className="app">
         <div className="dashboard">

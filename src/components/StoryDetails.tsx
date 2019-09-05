@@ -9,6 +9,7 @@ import { TaskId, Task } from "../entities/task.entity";
 import { updateStory } from "../redux/actions";
 import StoryForm from "./StoryForm";
 import { FileType } from "../services/trader.service";
+import SaveInfo from "./SaveInfo";
 
 interface Props {
   selectedStory: Story,
@@ -48,12 +49,12 @@ class StoryDetails extends React.Component<Props> {
   }
 
   render() {
-    const { selectedStory } = this.props;
+    const { selectedStory, isStateDirty } = this.props;
 
     const exportMenu = (
       <Menu>
         <Menu.Item text="To JSON file" onClick={() => this.props.exportStory(FileType.JSON)} />
-        <Menu.Item text="To TXT file" onClick={() => this.props.exportStory(FileType.DTD)} />
+        <Menu.Item text="To TXT file" onClick={() => this.props.exportStory(FileType.TXT)} />
       </Menu>
     );
 
@@ -74,6 +75,7 @@ class StoryDetails extends React.Component<Props> {
                 </div>
 
                 <div className="story-details__controls">
+                  <SaveInfo isSaving={isStateDirty} />
                   <Popover content={exportMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
                     <Button intent="none" text="Export" icon="export" rightIcon="caret-down" />
                   </Popover>
@@ -103,6 +105,7 @@ const mapStateToProps = (state: IStore, props: any): Props => {
     selectedStory,
     tasks: state.tasks.entities,
     tasksIds: state.tasks.ids,
+    isStateDirty: state.ui.isDirty,
     ...props
   };
 }
