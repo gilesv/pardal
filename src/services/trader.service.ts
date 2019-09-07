@@ -111,22 +111,29 @@ class Trader {
       switch (sourceVersion) {
         case undefined:
         case "0.0.2":
-          const nextStoryId = this.store.getState().stories.ids.length;
-          this.importStoryToStore(obj.story, nextStoryId);
-          this.importTasksToStore(obj.story.tasks, nextStoryId);
-          return obj.story.name;
+          const story = this.loadStory(obj.story);
+          const tasks = obj.story.tasks.map((taskObj: any) => this.loadTask(taskObj));
 
-        // case "next-version" <-- add new cases here if the json format changes in future versions
+          this.store.dispatch(addStory(story));
+
+          for (let task of tasks) {
+            this.store.dispatch(addTask(task, story.id));
+          }
+
+          return obj.story.name;
 
         default: // current version
           let labels: string[] = [];
           obj.stories.forEach((storyObj: any) => {
-            const nextStoryId = this.store.getState().stories.ids.length;
+            const story = this.loadStory(storyObj);
+            const tasks = storyObj.tasks.map((taskObj: any) => this.loadTask(taskObj));
 
-            this.importStoryToStore(storyObj, nextStoryId);
-            this.importTasksToStore(storyObj.tasks, nextStoryId);
+            this.store.dispatch(addStory(story));
+            for (let task of tasks) {
+              this.store.dispatch(addTask(task, story.id));
+            }
 
-            labels.push(storyObj.name);
+            labels.push(story.name);
           });
 
           return labels.join(", ");
@@ -136,10 +143,15 @@ class Trader {
     }
   }
 
-  private importStoryToStore(storyObj: any, nextId: StoryId) {
+  private loadStory(storyObj: any): Story {
     try {
-      const story = new Story(nextId, storyObj.name);
+      const story = new Story();
 
+      if (isNaN(storyObj.id)) {
+        story.id = storyObj.id;
+      }
+
+      story.name = storyObj.name;
       story.title = storyObj.title;
       story.description = storyObj.description;
       story.effort = storyObj.effort;
@@ -147,43 +159,35 @@ class Trader {
       story.description = storyObj.description;
       story.startDate = this.parseDate(storyObj.startDate);
       story.handOffDate = this.parseDate(storyObj.handOffDate);
-      story.tasks = [];
 
-      this.store.dispatch(addStory(story));
+      return story;
     } catch (e) {
       throw new Error("incomplete story data. " + e.message);
     }
   }
 
-  private importTasksToStore(tasksArray: any[], storyId: StoryId) {
-    const state = this.store.getState();
-    const newTasks: Task[] = [];
-    let nextId = state.tasks.ids.length;
+  private loadTask(taskObj: any): Task {
+    try {
+      const task = new Task();
 
-    for (let taskObj of tasksArray) {
-      try {
-        const task = new Task(nextId);
-
-        task.title = taskObj.title;
-        task.description = taskObj.description;
-        task.effort = taskObj.effort;
-        task.priority = taskObj.priority;
-        task.description = taskObj.description;
-        task.startDate = this.parseDate(taskObj.startDate);
-        task.handOffDate = this.parseDate(taskObj.handOffDate);
-        task.type = taskObj.type;
-        task.area = taskObj.area;
-        task.assignee = taskObj.assignee;
-
-        newTasks.push(task);
-        nextId++;
-      } catch (e) {
-        throw new Error("incomplete task data. " + e.message);
+      if (isNaN(taskObj.id)) {
+        task.id = taskObj.id;
       }
-    }
 
-    for (let task of newTasks) {
-      this.store.dispatch(addTask(task, storyId));
+      task.title = taskObj.title;
+      task.description = taskObj.description;
+      task.effort = taskObj.effort;
+      task.priority = taskObj.priority;
+      task.description = taskObj.description;
+      task.startDate = this.parseDate(taskObj.startDate);
+      task.handOffDate = this.parseDate(taskObj.handOffDate);
+      task.type = taskObj.type;
+      task.area = taskObj.area;
+      task.assignee = taskObj.assignee;
+
+      return task;
+    } catch (e) {
+      throw new Error("incomplete task data. " + e.message);
     }
   }
 

@@ -54,5 +54,6 @@ button svg[data-icon*="chevron"] {
 
 [class*="bp3-"]:focus {
   outline: none;
-  box-shadow: 0 0 0 1px $darkpurple;
+  *box-shadow: 0 0 0 1px $darkpurple;
+  box-shadow: transparent;
 }

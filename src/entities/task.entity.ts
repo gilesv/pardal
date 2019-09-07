@@ -1,4 +1,6 @@
-export type TaskId = number;
+import uuid from "uuid";
+
+export type TaskId = any; // TODO: change
 
 export enum TaskType {
   TASK = "TASK",
@@ -22,8 +24,8 @@ export const Assignee = {
 }
 
 export class Task {
-  constructor(id: TaskId, type?: TaskType) {
-    this.id = id;
+  constructor(type?: TaskType) {
+    this.id = uuid();
     this.type = type || TaskType.TASK;
     this.title = "New item";
     this.priority = 1.0;

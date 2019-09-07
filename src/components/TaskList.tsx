@@ -1,12 +1,12 @@
 import React from "react";
-import { Story } from "../entities/story.entity";
+import { Story, StoryId } from "../entities/story.entity";
 import { connect } from "react-redux";
 import { IStore } from "../redux/reducers";
 import { Task, TaskId, TaskType } from "../entities/task.entity";
 import TaskItem from "./TaskItem";
 import { NonIdealState, Button, Popover, Position, ButtonGroup, Menu } from "@blueprintjs/core";
-import { addTask, updateTask } from "../redux/actions";
-import { CSSTransition } from "react-transition-group";
+import { addTask, updateTask, removeTask } from "../redux/actions";
+import Notification from "../entities/notification.entity";
 
 interface Props {
   tasks: { [key: number]: Task },
@@ -21,16 +21,21 @@ class TaskList extends React.Component<Props> {
 
     this.addTask = this.addTask.bind(this);
     this.updateTask = this.updateTask.bind(this);
+    this.removeTask = this.removeTask.bind(this);
   }
 
   public addTask(type = TaskType.TASK, index = -1) {
-    const id = this.props.tasksIds.length;
-    const task = new Task(id, type);
+    const task = new Task(type);
     this.props.dispatch(addTask(task, this.props.story.id, index));
   }
 
   public updateTask(task: Task) {
     this.props.dispatch(updateTask(task));
+  }
+
+  public removeTask(task: Task, storyId: StoryId) {
+    this.props.dispatch(removeTask(task.id, storyId));
+    this.props.notify(new Notification(`"${task.title}" was deleted successfully.`, "tick"));
   }
 
   render() {
@@ -66,8 +71,10 @@ class TaskList extends React.Component<Props> {
                 key={`task#${taskId}`}
                 index={i}
                 task={task}
+                storyId={story.id}
                 updateTask={this.updateTask}
-                addTaskAtIndex={(index) => this.addTask(TaskType.TASK, index)} />
+                addTaskAtIndex={(index) => this.addTask(TaskType.TASK, index)}
+                removeTask={this.removeTask} />
             })
             : <NonIdealState
               className="story-details__nothing"

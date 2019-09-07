@@ -176,9 +176,9 @@ export function updateTask(task: Task): IAction {
   };
 }
 
-export function removeTask(taskId: TaskId): IAction {
+export function removeTask(taskId: TaskId, storyId: StoryId): IAction {
   return {
     type: ActionType.REMOVE_TASK,
-    payload: { taskId }
+    payload: { taskId, storyId }
   };
 }

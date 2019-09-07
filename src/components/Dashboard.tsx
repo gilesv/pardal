@@ -27,6 +27,7 @@ class Dashboard extends React.Component<Props> {
 
     this.exportStory = this.exportStory.bind(this);
     this.importStory = this.importStory.bind(this);
+    this.notify = this.notify.bind(this);
   }
 
   public componentDidMount() {
@@ -39,7 +40,6 @@ class Dashboard extends React.Component<Props> {
 
     if (storageState) {
       Trader.importStories(storageState, FileType.JSON);
-      this.props.dispatch(setStateClean());
 
       this.notify(new Notification("Your work was restored!", "tick"));
     }
@@ -113,7 +113,7 @@ class Dashboard extends React.Component<Props> {
           {
             stories && stories.ids && stories.ids.length > 0 ?
               <main>
-                <StoryDetails exportStory={this.exportStory} />
+                <StoryDetails exportStory={this.exportStory} notify={this.notify} />
               </main>
               : null
           }

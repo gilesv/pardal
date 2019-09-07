@@ -1,10 +1,11 @@
 import { TaskId } from "./task.entity";
+import uuid from "uuid";
 
-export type StoryId = number;
+export type StoryId = any; // TODO: change
 
 export class Story {
-  constructor(id: StoryId, name: string) {
-    this.id = id;
+  constructor(name?: string) {
+    this.id = uuid();
     this.name = name || "New Story";
     this.title = "";
 

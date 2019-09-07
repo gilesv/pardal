@@ -21,6 +21,9 @@ export default function storiesReducer(
     case ActionType.ADD_TASK:
       return addTaskToStory(state, action.payload);
 
+    case ActionType.REMOVE_TASK:
+      return removeTaskFromStory(state, action.payload);
+
     default:
       return state;
   }
@@ -65,6 +68,20 @@ const addTaskToStory = (state: IEntityMap<Story>, payload: any) => {
   const { task, storyId, index } = payload;
   const story = state.entities[storyId];
   story.tasks = addToArray(story.tasks, task.id, index);
+
+  return {
+    ...state,
+    entities: {
+      ...state.entities,
+      [storyId]: story
+    },
+  };
+}
+
+const removeTaskFromStory = (state: IEntityMap<Story>, payload: any) => {
+  const { taskId, storyId } = payload;
+  const story = state.entities[storyId];
+  story.tasks = removeFromArray(story.tasks, taskId);
 
   return {
     ...state,

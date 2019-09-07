@@ -25,8 +25,7 @@ class StoryList extends React.Component<Props> {
   }
 
   public addStory() {
-    const id = this.props.storiesIds.length;
-    const story = new Story(id, this.generateNewName());
+    const story = new Story(this.generateNewName());
     this.props.dispatch(addStory(story));
   }
 

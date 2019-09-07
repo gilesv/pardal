@@ -10,7 +10,23 @@
     padding: 10px;
     cursor: pointer;
     display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__header-left {
+    display: flex;
     align-items: center;
+    flex-flow: row nowrap;
+  }
+
+  &__header-right {
+    button.bp3-button {
+      padding: 0px 12px;
+      min-width: 20px;
+      min-height: 20px;
+    }
   }
 
   &__title {
@@ -27,6 +43,15 @@
 
   &__body {
     padding: 15px;
+  }
+
+  &__dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    .bp3-button {
+      margin-left: 5px;
+    }
   }
 
   &__add-button {

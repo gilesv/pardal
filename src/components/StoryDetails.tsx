@@ -16,6 +16,7 @@ interface Props {
   tasks: { [key: number]: Task },
   tasksIds: TaskId[],
   exportStory: (fileType: FileType) => void,
+  notify: () => void,
   [key: string]: any
 }
 
@@ -49,7 +50,7 @@ class StoryDetails extends React.Component<Props> {
   }
 
   render() {
-    const { selectedStory, isStateDirty } = this.props;
+    const { selectedStory, isStateDirty, notify } = this.props;
 
     const exportMenu = (
       <Menu>
@@ -87,7 +88,7 @@ class StoryDetails extends React.Component<Props> {
               </div>
 
               <div className="story-details__stories">
-                <TaskList story={selectedStory} />
+                <TaskList story={selectedStory} notify={notify} />
               </div>
             </> : null
         }
