@@ -8,22 +8,4 @@
     padding: 0 20px 20px 20px;
     width: 100%;
   }
-
-  header {
-    margin-bottom: 20px;
-
-    .app-title {
-      font-size: 26px;
-      margin: 0;
-      color: $primary;
-      font-family: FiraCode;
-
-      span {
-        font-size: 10px;
-        color: $lightpurple;
-        vertical-align: super;
-        margin-left: 2px;
-      }
-    }
-  }
 }

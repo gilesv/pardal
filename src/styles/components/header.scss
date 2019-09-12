@@ -1,0 +1,28 @@
+header.header {
+  margin-bottom: 20px;
+
+  .app-logo {
+    font-size: 26px;
+    margin: 0;
+    font-family: FiraCode;
+
+    &__icon {
+      color: $primary;
+      font-weight: bold;
+    }
+
+    &__name {
+      margin-left: 6px;
+    }
+
+    &__version {
+      font-size: 11px;
+      vertical-align: super;
+      margin-left: 4px;
+    }
+
+    a, a:hover {
+      color: $lesslightergray;
+    }
+  }
+}

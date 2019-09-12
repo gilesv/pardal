@@ -11,7 +11,7 @@ import IEntityMap from "../redux/utils/entity-map.interface";
 import NotifyDock from "./NotifyDock";
 import { setStateClean } from "../redux/actions";
 import { importFromStorage, exportToStorage } from "../services/localStorage.service";
-import SaveInfo from "./SaveInfo";
+import Header from "./Header";
 
 interface Props {
   selectedStory: number,
@@ -103,10 +103,7 @@ class Dashboard extends React.Component<Props> {
       <div className="app">
         <div className="dashboard">
           <aside>
-            <header>
-              <div className="app-title"> >=pardal<span>v{appVersion}</span></div>
-            </header>
-
+            <Header appVersion={appVersion} />
             <StoryList importStory={this.importStory} />
           </aside>
 

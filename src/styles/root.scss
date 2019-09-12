@@ -7,6 +7,7 @@ html, body {
 $primary: #6600ff;
 
 $lightgray: #cfd0d1;
+$lesslightergray: #bbbdbd;
 $lightpurple: #d8c1fb;
 $darkpurple: #5107bf;
 
@@ -20,6 +21,7 @@ $darkpurple: #5107bf;
 @import "./components/task-item";
 @import "./components/task-form";
 @import "./components/save-info";
+@import "./components/header";
 
 // Fonts
 @font-face {
