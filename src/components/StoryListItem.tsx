@@ -21,7 +21,7 @@ export default class StoryListItem extends React.Component<Props> {
     const { story, removeStory, isSelected } = this.props;
     return (
       <div className={`story-list-item ${isSelected ? "selected" : ""}`} onClick={(e) => this.handleClick(story.id)}>
-        <div className="story-item__name">
+        <div className="story-item__name ellipsis">
           {story.name}
         </div>
 

@@ -62,3 +62,13 @@ button svg[data-icon*="chevron"] {
   *box-shadow: 0 0 0 1px $darkpurple;
   box-shadow: transparent;
 }
+
+.ellipsis {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fira {
+  font-family: FiraCode;
+}

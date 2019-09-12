@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { IStore } from "../redux/reducers";
 import { Task, TaskId, TaskType } from "../entities/task.entity";
 import TaskItem from "./TaskItem";
-import { NonIdealState, Button, Popover, Position, ButtonGroup, Menu } from "@blueprintjs/core";
+import { NonIdealState, Button } from "@blueprintjs/core";
 import { addTask, updateTask, removeTask } from "../redux/actions";
 import Notification from "../entities/notification.entity";
 
@@ -12,7 +12,6 @@ interface Props {
   tasks: { [key: number]: Task },
   tasksIds: TaskId[],
   story: Story,
-  scrollDown: () => void,
   [key: string]: any
 }
 
@@ -28,10 +27,6 @@ class TaskList extends React.Component<Props> {
   public addTask(type = TaskType.TASK, index = -1) {
     const task = new Task(type);
     this.props.dispatch(addTask(task, this.props.story.id, index));
-
-    if (index < 0) {
-      this.props.scrollDown();
-    }
   }
 
   public updateTask(task: Task) {
@@ -45,29 +40,10 @@ class TaskList extends React.Component<Props> {
 
   render() {
     const { story } = this.props;
-    const addItemMenu = (
-      <Menu>
-        <Menu.Item text="Task" onClick={() => this.addTask()} />
-        <Menu.Item text="Enhancement" onClick={() => this.addTask(TaskType.ENH)} />
-        <Menu.Item text="Test" onClick={() => this.addTask(TaskType.TEST)} />
-      </Menu>
-    );
+
     return (
       <div className="task-list">
-        <div className="task-list__header">
-          {
-            story && story.tasks.length > 0 ?
-              <ButtonGroup>
-                <Button intent="success" text="Add item" icon="add-to-artifact" onClick={() => this.addTask()} />
-
-                <Popover content={addItemMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
-                  <Button intent="success" rightIcon="caret-down" />
-                </Popover>
-
-              </ButtonGroup>
-              : null
-          }
-        </div>
+        <div className="task-list__header"></div>
         {
           story && story.tasks && story.tasks.length > 0 ?
             story.tasks.map((taskId, i) => {

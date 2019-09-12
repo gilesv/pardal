@@ -13,16 +13,14 @@ const StoryForm = (props: Props) => {
 
   return (
     <div className="story-form">
-
-      <FormGroup label="Title">
-        <InputGroup
-          onChange={(e: any) => update('title', e.target.value)}
-          value={story.title}
-          placeholder="Insert a title..."
-          fill={true} />
-      </FormGroup>
-
       <div className="story-form__row">
+        <FormGroup label="Name">
+          <InputGroup
+            onChange={(e: any) => update('name', e.target.value)}
+            value={story.name}
+            placeholder="STORY-001" />
+        </FormGroup>
+
         <FormGroup label="Priority">
           <NumericInput id="priority" value={story.priority} max={5.0} min={1.0} onValueChange={(n) => update('priority', n)} />
         </FormGroup>
@@ -52,7 +50,15 @@ const StoryForm = (props: Props) => {
         </FormGroup>
       </div>
 
-      <FormGroup label="Description">
+      <FormGroup label="Title">
+        <InputGroup
+          onChange={(e: any) => update('title', e.target.value)}
+          value={story.title}
+          placeholder="Insert a title..."
+          fill={true} />
+      </FormGroup>
+
+      <FormGroup label="Acceptance Criteria">
         <TextArea
           growVertically={false}
           fill={true}

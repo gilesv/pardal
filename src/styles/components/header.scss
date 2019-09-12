@@ -2,7 +2,7 @@ header.header {
   margin-bottom: 20px;
 
   .app-logo {
-    font-size: 26px;
+    font-size: 28px;
     margin: 0;
     font-family: FiraCode;
 
@@ -12,7 +12,8 @@ header.header {
     }
 
     &__name {
-      margin-left: 6px;
+      margin-left: 2px;
+      letter-spacing: -2px;
     }
 
     &__version {

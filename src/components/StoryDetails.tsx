@@ -3,10 +3,10 @@ import TaskList from "./TaskList";
 import { IStore } from "../redux/reducers";
 import { connect } from "react-redux";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
-import { Button, Tag, Menu, Popover, Position } from "@blueprintjs/core";
+import { Button, Tag, Menu, Popover, Position, ButtonGroup, FormGroup } from "@blueprintjs/core";
 import { Story } from "../entities/story.entity";
-import { TaskId, Task } from "../entities/task.entity";
-import { updateStory } from "../redux/actions";
+import { TaskId, Task, TaskType } from "../entities/task.entity";
+import { updateStory, addTask } from "../redux/actions";
 import StoryForm from "./StoryForm";
 import { FileType } from "../services/trader.service";
 import SaveInfo from "./SaveInfo";
@@ -34,12 +34,6 @@ class StoryDetails extends React.Component<Props> {
 
   public footElement: any;
 
-  public scrollDown() {
-    setTimeout(() => {
-      this.footElement.current.scrollIntoView({ behavior: "smooth" });
-    }, 200);
-  }
-
   public updateStoryName(e: ContentEditableEvent) {
     const name = e.target.value.trim() || "";
     const updated = { ...this.props.selectedStory, name };
@@ -59,6 +53,18 @@ class StoryDetails extends React.Component<Props> {
     this.props.dispatch(updateStory(updated));
   }
 
+  public addTask(type = TaskType.TASK) {
+    const task = new Task(type);
+    this.props.dispatch(addTask(task, this.props.selectedStory.id, -1));
+    this.scrollDown();
+  }
+
+  public scrollDown() {
+    setTimeout(() => {
+      this.footElement.current.scrollIntoView({ behavior: "smooth" });
+    }, 200);
+  }
+
   render() {
     const { selectedStory, isStateDirty, notify } = this.props;
 
@@ -69,20 +75,26 @@ class StoryDetails extends React.Component<Props> {
       </Menu>
     );
 
+    const addItemMenu = (
+      <Menu>
+        <Menu.Item text="Task" onClick={() => this.addTask()} />
+        <Menu.Item text="Enhancement" onClick={() => this.addTask(TaskType.ENH)} />
+        <Menu.Item text="Test" onClick={() => this.addTask(TaskType.TEST)} />
+      </Menu>
+    );
+
     return (
       <div className="story-details">
         {
           selectedStory ?
             <>
               <div className="story-details__header">
-                <div className="story-details__name">
+                <div className="story-details__left">
                   <Tag intent="primary" minimal={true}>STORY</Tag>
 
-                  <ContentEditable
-                    innerRef={this.editableNameElement}
-                    onChange={(e) => this.updateStoryName(e)}
-                    onKeyDown={(e) => this.handleEnterKeyOnStoryName(e)}
-                    html={selectedStory.name || ""} />
+                  <div className="story-details__name ellipsis">
+                    {selectedStory.name}
+                  </div>
                 </div>
 
                 <div className="story-details__controls">
@@ -90,6 +102,15 @@ class StoryDetails extends React.Component<Props> {
                   <Popover content={exportMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
                     <Button intent="none" text="Export" icon="export" rightIcon="caret-down" />
                   </Popover>
+
+                  <ButtonGroup>
+                    <Button intent="success" text="Add item" icon="add-to-artifact" onClick={() => this.addTask()} />
+
+                    <Popover content={addItemMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
+                      <Button intent="success" rightIcon="caret-down" />
+                    </Popover>
+
+                  </ButtonGroup>
                 </div>
               </div>
 
@@ -97,8 +118,10 @@ class StoryDetails extends React.Component<Props> {
                 <StoryForm story={selectedStory} update={this.updateAttribute} />
               </div>
 
-              <div className="story-details__stories">
-                <TaskList story={selectedStory} notify={notify} scrollDown={this.scrollDown} />
+              <div className="story-details__items">
+                <FormGroup label="Items">
+                  <TaskList story={selectedStory} notify={notify} scrollDown={this.scrollDown} />
+                </FormGroup>
               </div>
 
               <div className="story-details__footer" ref={this.footElement}></div>

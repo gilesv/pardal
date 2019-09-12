@@ -26,7 +26,7 @@ export default class TaskItem extends React.Component<Props> {
   }
 
   public state = {
-    isBodyVisible: true,
+    isBodyVisible: false,
     isDialogVisible: false,
   }
 
@@ -95,7 +95,7 @@ export default class TaskItem extends React.Component<Props> {
               <Tag intent="primary" minimal={true}>{task.assignee}</Tag>
             </div>
 
-            <div className="task-item__title">{task.title}</div>
+            <div className="task-item__title ellipsis">{task.title}</div>
           </div>
 
           <div className="task-item__header-right" onClick={this.handleOptionsClick}>
@@ -131,12 +131,13 @@ export default class TaskItem extends React.Component<Props> {
 const AddTaskButton = (props: any) => {
   const addIndex = props.type === "after" ? props.index + 1 : props.index;
   return props.visible ? (
-    <div className={`task-item__add-button ${props.type}`} title="Add new item here" onClick={() => props.addTask(addIndex)}>
-      <div className="button" >
-        <Icon icon="plus" iconSize={15}></Icon>
-      </div>
-
+    <div className={`task-item__add-item ${props.type}`} title="Add new item here" onClick={() => props.addTask(addIndex)}>
       <div className="line"></div>
+      <div className="text">
+        <span className="fira"> {"<--"} </span>
+        Add new item here
+        <span className="fira"> {"-->"} </span>
+      </div>
     </div>
   ) : null;
 }
