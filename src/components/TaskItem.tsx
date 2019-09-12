@@ -17,19 +17,12 @@ export default class TaskItem extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    this.element = React.createRef();
     this.update = this.update.bind(this);
     this.updateEffort = this.updateEffort.bind(this);
     this.toggleBody = this.toggleBody.bind(this);
     this.handleOptionsClick = this.handleOptionsClick.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
     this.toggleDialog = this.toggleDialog.bind(this);
-  }
-
-  public element: any;
-
-  componentDidMount() {
-    this.element.current.scrollIntoView({ behavior: "smooth" });
   }
 
   public state = {
@@ -67,7 +60,7 @@ export default class TaskItem extends React.Component<Props> {
       this.update('effort', value);
     }
   }
-  
+
   deleteItem() {
     this.toggleDialog();
 
@@ -91,7 +84,7 @@ export default class TaskItem extends React.Component<Props> {
     );
 
     return (
-      <div className="task-item" ref={this.element}>
+      <div className="task-item">
         <AddTaskButton type="before" visible={index === 0} index={index} addTask={(index: number) => addTaskAtIndex(index)} />
 
         <div className="task-item__header" onClick={this.toggleBody}>
@@ -104,33 +97,33 @@ export default class TaskItem extends React.Component<Props> {
 
             <div className="task-item__title">{task.title}</div>
           </div>
-          
+
           <div className="task-item__header-right" onClick={this.handleOptionsClick}>
             <Popover content={optionsMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
-              <Button rightIcon="more" minimal={true}/>
+              <Button rightIcon="more" minimal={true} />
             </Popover>
           </div>
-      </div>
-
-      <Collapse isOpen={this.state.isBodyVisible}>
-        <div className="task-item__body">
-          <TaskForm task={task} update={this.update} updateEffort={this.updateEffort} showDates={false} />
-        </div>
-      </Collapse>
-
-      <AddTaskButton type="after" visible={true} index={index} addTask={(index: number) => addTaskAtIndex(index)} />
-      
-      <Dialog isOpen={this.state.isDialogVisible} onClose={this.toggleDialog} title="Delete item">
-        <div className={Classes.DIALOG_BODY}>
-          Are you really sure to delete the following item: <b>{task.title}</b>? This cannot be undone.
         </div>
 
-        <div className={`${Classes.DIALOG_FOOTER} task-item__dialog-footer`} >
-          <Button intent="none" onClick={this.toggleDialog}>Cancel</Button>
-          <Button intent="danger" onClick={this.deleteItem}>Delete</Button>
+        <Collapse isOpen={this.state.isBodyVisible}>
+          <div className="task-item__body">
+            <TaskForm task={task} update={this.update} updateEffort={this.updateEffort} showDates={false} />
+          </div>
+        </Collapse>
+
+        <AddTaskButton type="after" visible={true} index={index} addTask={(index: number) => addTaskAtIndex(index)} />
+
+        <Dialog isOpen={this.state.isDialogVisible} onClose={this.toggleDialog} title="Delete item">
+          <div className={Classes.DIALOG_BODY}>
+            Are you really sure to delete the following item: <b>{task.title}</b>? This cannot be undone.
         </div>
-      </Dialog>
-    </div>
+
+          <div className={`${Classes.DIALOG_FOOTER} task-item__dialog-footer`} >
+            <Button intent="none" onClick={this.toggleDialog}>Cancel</Button>
+            <Button intent="danger" onClick={this.deleteItem}>Delete</Button>
+          </div>
+        </Dialog>
+      </div >
     );
   }
 }

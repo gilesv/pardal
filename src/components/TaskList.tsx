@@ -12,6 +12,7 @@ interface Props {
   tasks: { [key: number]: Task },
   tasksIds: TaskId[],
   story: Story,
+  scrollDown: () => void,
   [key: string]: any
 }
 
@@ -27,6 +28,10 @@ class TaskList extends React.Component<Props> {
   public addTask(type = TaskType.TASK, index = -1) {
     const task = new Task(type);
     this.props.dispatch(addTask(task, this.props.story.id, index));
+
+    if (index < 0) {
+      this.props.scrollDown();
+    }
   }
 
   public updateTask(task: Task) {

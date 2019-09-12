@@ -24,11 +24,21 @@ class StoryDetails extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.editableNameElement = React.createRef()
+    this.footElement = React.createRef();
 
     this.updateAttribute = this.updateAttribute.bind(this);
+    this.scrollDown = this.scrollDown.bind(this);
   }
 
   public editableNameElement: RefObject<HTMLDivElement>;
+
+  public footElement: any;
+
+  public scrollDown() {
+    setTimeout(() => {
+      this.footElement.current.scrollIntoView({ behavior: "smooth" });
+    }, 200);
+  }
 
   public updateStoryName(e: ContentEditableEvent) {
     const name = e.target.value.trim() || "";
@@ -88,11 +98,12 @@ class StoryDetails extends React.Component<Props> {
               </div>
 
               <div className="story-details__stories">
-                <TaskList story={selectedStory} notify={notify} />
+                <TaskList story={selectedStory} notify={notify} scrollDown={this.scrollDown} />
               </div>
+
+              <div className="story-details__footer" ref={this.footElement}></div>
             </> : null
         }
-
       </div>
     );
   }
