@@ -11,6 +11,7 @@ import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/datetime/lib/css/blueprint-datetime.css";
 import "./styles/root.scss";
+import "./fonts/FiraCodeRegular.woff2";
 
 const version = "0.0.2";
 
