@@ -147,10 +147,6 @@ class Trader {
     try {
       const story = new Story();
 
-      if (isNaN(storyObj.id)) {
-        story.id = storyObj.id;
-      }
-
       story.name = storyObj.name;
       story.title = storyObj.title;
       story.description = storyObj.description;
@@ -169,10 +165,6 @@ class Trader {
   private loadTask(taskObj: any): Task {
     try {
       const task = new Task();
-
-      if (isNaN(taskObj.id)) {
-        task.id = taskObj.id;
-      }
 
       task.title = taskObj.title;
       task.description = taskObj.description;

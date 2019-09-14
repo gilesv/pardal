@@ -9,7 +9,7 @@ import Notification from "../entities/notification.entity";
 import { Story, StoryId } from "../entities/story.entity";
 import IEntityMap from "../redux/utils/entity-map.interface";
 import NotifyDock from "./NotifyDock";
-import { setStateClean } from "../redux/actions";
+import { setStateClean, addStory, removeStory, selectStory, removeTask } from "../redux/actions";
 import { importFromStorage, exportToStorage } from "../services/localStorage.service";
 import Header from "./Header";
 
@@ -26,6 +26,9 @@ class Dashboard extends React.Component<Props> {
     super(props);
 
     this.exportStory = this.exportStory.bind(this);
+    this.addStory = this.addStory.bind(this);
+    this.deleteStory = this.deleteStory.bind(this);
+    this.selectStory = this.selectStory.bind(this);
     this.importStory = this.importStory.bind(this);
     this.notify = this.notify.bind(this);
   }
@@ -35,17 +38,43 @@ class Dashboard extends React.Component<Props> {
     this.saveProgress();
   }
 
-  private restorePreviousWork() {
+  public addStory() {
+    const story = new Story("New Story");
+    this.props.dispatch(addStory(story));
+    setTimeout(() => this.selectStory(-1), 50);
+  }
+
+  public deleteStory(story: Story, index: number) {
+    const selectedStory = this.props.selectedStory;
+    const isAfterSelected = index > selectedStory;
+
+    for (let task of story.tasks) {
+      this.props.dispatch(removeTask(task.id, story.id));
+    }
+
+    this.props.dispatch(removeStory(story.id));
+
+    if (!isAfterSelected) {
+      this.selectStory(selectedStory - 1);
+    }
+  }
+
+  public selectStory(index: number) {
+    this.props.dispatch(selectStory(
+      index === -1 ? this.props.stories.ids.length - 1 : index
+    ));
+  }
+
+  public restorePreviousWork() {
     const storageState = importFromStorage();
 
     if (storageState) {
       Trader.importStories(storageState, FileType.JSON);
-
       this.notify(new Notification("Your work was restored!", "tick"));
     }
   }
 
-  private saveProgress() {
+  public saveProgress() {
     setInterval(() => {
       if (this.props.isStateDirty) {
         const json = Trader.exportStories(
@@ -82,7 +111,8 @@ class Dashboard extends React.Component<Props> {
 
         try {
           const storyName = Trader.importStories(e.target.result, FileType.JSON);
-          notification = new Notification(`"${storyName}" was imported successfully.`, "tick")
+          notification = new Notification(`"${storyName}" was imported successfully.`, "tick");
+          this.selectStory(-1);
         } catch (e) {
           notification = new Notification(`${e.message}`, "error");
         }
@@ -93,30 +123,34 @@ class Dashboard extends React.Component<Props> {
     }
   }
 
-  private notify(notification: Notification) {
+  public notify(notification: Notification) {
     NotifyDock.show(notification);
   }
 
   render() {
-    const { stories, appVersion, isStateDirty } = this.props;
+    const { stories, appVersion } = this.props;
+    const hasAnyStory = stories && stories.ids && stories.ids.length > 0;
+
     return (
       <div className="app">
         <div className="dashboard">
           <aside>
             <Header appVersion={appVersion} />
-            <StoryList importStory={this.importStory} />
+            <StoryList
+              addStory={this.addStory}
+              deleteStory={this.deleteStory}
+              selectStory={this.selectStory}
+              importStory={this.importStory} />
           </aside>
 
           {
-            stories && stories.ids && stories.ids.length > 0 ?
-              <main>
+            hasAnyStory
+              ? <main>
                 <StoryDetails exportStory={this.exportStory} notify={this.notify} />
               </main>
               : null
           }
-
         </div>
-
       </div>
     );
   }

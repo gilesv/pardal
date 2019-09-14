@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import StoryListItem from "./StoryListItem";
 import { addStory, removeStory, selectStory, removeTask } from "../redux/actions";
 import { Button, NonIdealState, Menu, ButtonGroup, Popover, Position } from "@blueprintjs/core";
@@ -7,11 +7,13 @@ import { IStore } from "../redux/reducers";
 import { Story, StoryId } from "../entities/story.entity";
 
 interface Props {
-  story: { [key: number]: Story },
+  stories: Story[],
   storiesIds: StoryId[],
-  deleteStory: () => void,
   selectedStory: StoryId,
-  [key: string]: any
+  addStory: () => void,
+  deleteStory: (storyId: StoryId, index: number) => void,
+  selectStory: (index: number) => void,
+  importStory: (e: any) => void,
 };
 
 class StoryList extends React.Component<Props> {
@@ -21,52 +23,16 @@ class StoryList extends React.Component<Props> {
     super(props);
     this.fileSelector = React.createRef();
 
-    this.addStory = this.addStory.bind(this);
-    this.clickFileSelector = this.clickFileSelector.bind(this);
-    this.deleteStory = this.deleteStory.bind(this);
+    this.handleClickCreateNewStory = this.handleClickCreateNewStory.bind(this);
+    this.handleClickImportFromJson = this.handleClickImportFromJson.bind(this);
+    this.handleFileSelectorChange = this.handleFileSelectorChange.bind(this);
   }
 
-  public addStory() {
-    const story = new Story(this.generateNewName());
-    this.props.dispatch(addStory(story));
+  private handleClickCreateNewStory() {
+    this.props.addStory();
   }
 
-  private generateNewName(): string {
-    const defaultName = "New Story";
-    let name = `${defaultName} 1`;
-    let counter = 1;
-
-    while (this.storyExists(name)) {
-      name = `${defaultName} ${counter++}`;
-    }
-
-    return name;
-  }
-
-  private storyExists(name: string): boolean {
-    for (let id of this.props.storiesIds) {
-      if (this.props.stories[id].name === name) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public deleteStory(story: Story) {
-    for (let task of story.tasks) {
-      this.props.dispatch(removeTask(task.id, story.id));
-    }
-
-    this.props.dispatch(removeStory(story.id));
-    this.props.dispatch(selectStory(0));
-  }
-
-  public selectStory(storyId: StoryId) {
-    const index = this.props.storiesIds.indexOf(storyId || 0);
-    this.props.dispatch(selectStory(index));
-  }
-
-  public clickFileSelector() {
+  private handleClickImportFromJson() {
     const el = this.fileSelector.current;
     if (el) {
       el.value = "";
@@ -74,13 +40,18 @@ class StoryList extends React.Component<Props> {
     }
   }
 
+  private handleFileSelectorChange(e: any) {
+    this.props.importStory(e);
+  }
+
   render() {
-    const { storiesIds, selectedStory, importStory } = this.props;
+    const { storiesIds, selectedStory, selectStory, deleteStory } = this.props;
+    const hasContent = storiesIds && storiesIds.length > 0;
 
     const addStoryMenu = (
       <Menu>
-        <Menu.Item text="Create new" icon="plus" onClick={this.addStory} />
-        <Menu.Item text="Import from JSON" icon="import" onClick={this.clickFileSelector} />
+        <Menu.Item text="Create new" icon="plus" onClick={this.handleClickCreateNewStory} />
+        <Menu.Item text="Import from JSON" icon="import" onClick={this.handleClickImportFromJson} />
       </Menu>
     );
 
@@ -91,13 +62,13 @@ class StoryList extends React.Component<Props> {
           className="story-list__file-selector"
           type="file"
           ref={this.fileSelector}
-          onChange={(e) => importStory(e)}
+          onChange={this.handleFileSelectorChange}
           accept=".json, application/json" />
 
         <div className="story-list__header">
           <h1>Stories</h1>
           <ButtonGroup>
-            <Button text="Add Story" icon="cube-add" intent="none" onClick={this.addStory} />
+            <Button text="Add Story" icon="cube-add" intent="none" onClick={this.handleClickCreateNewStory} />
             <Popover content={addStoryMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
               <Button intent="none" rightIcon="caret-down" />
             </Popover>
@@ -106,16 +77,18 @@ class StoryList extends React.Component<Props> {
 
         <div className="story-list__body">
           {
-            storiesIds && storiesIds.length > 0 ?
-              storiesIds.map((storyId, index) => {
+            hasContent
+              ? storiesIds.map((storyId, index) => {
                 const story: Story = this.props.stories[storyId];
                 return <StoryListItem
                   story={story}
                   key={`story#${storyId}`}
+                  storyIndex={index}
                   isSelected={selectedStory === index}
-                  selectStory={(storyId: StoryId) => this.selectStory(storyId)}
-                  deleteStory={this.deleteStory} />
-              }) : <NonIdealState
+                  selectStory={selectStory}
+                  deleteStory={deleteStory} />
+              })
+              : <NonIdealState
                 className="story-list__no-items"
                 title="Nothing here 😴"
                 description="Add stories to start!"

@@ -26,7 +26,7 @@ export default class TaskItem extends React.Component<Props> {
   }
 
   public state = {
-    isBodyVisible: false,
+    isBodyVisible: true,
     isDialogVisible: false,
   }
 

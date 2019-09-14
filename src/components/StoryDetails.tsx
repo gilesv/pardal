@@ -23,16 +23,13 @@ interface Props {
 class StoryDetails extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    this.editableNameElement = React.createRef()
     this.footElement = React.createRef();
 
     this.updateAttribute = this.updateAttribute.bind(this);
     this.scrollDown = this.scrollDown.bind(this);
   }
 
-  public editableNameElement: RefObject<HTMLDivElement>;
-
-  public footElement: any;
+  public footElement: RefObject<HTMLDivElement>;
 
   public updateStoryName(e: ContentEditableEvent) {
     const name = e.target.value.trim() || "";
@@ -40,14 +37,6 @@ class StoryDetails extends React.Component<Props> {
     this.props.dispatch(updateStory(updated));
   }
 
-  public handleEnterKeyOnStoryName(e: KeyboardEvent<HTMLDivElement>) {
-    const el = this.editableNameElement.current;
-    if (["Enter", "Escape"].includes(e.key) && el) {
-      el.blur();
-    }
-  }
-
-  // edit story
   public updateAttribute(key: string, value: any) {
     const updated = { ...this.props.selectedStory, [key]: value };
     this.props.dispatch(updateStory(updated));
@@ -61,8 +50,12 @@ class StoryDetails extends React.Component<Props> {
 
   public scrollDown() {
     setTimeout(() => {
-      this.footElement.current.scrollIntoView({ behavior: "smooth" });
-    }, 200);
+      const footEl = this.footElement.current;
+
+      if (footEl) {
+        footEl.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 500);
   }
 
   render() {

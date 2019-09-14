@@ -8,11 +8,13 @@
     position: sticky;
     top: 0;
     padding-top: 40px;
+    flex: 1;
+    transform: translate3d(0,0,0);
   }
 
   main {
     flex-basis: 72%;
-    margin-left: 20px;
+    margin-left: 35px;
     margin-top: 101px;
   }
 
