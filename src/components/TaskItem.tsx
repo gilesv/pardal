@@ -134,9 +134,7 @@ const AddTaskButton = (props: any) => {
     <div className={`task-item__add-item ${props.type}`} title="Add new item here" onClick={() => props.addTask(addIndex)}>
       <div className="line"></div>
       <div className="text">
-        <span className="fira"> {"<--"} </span>
-        Add new item here
-        <span className="fira"> {"-->"} </span>
+        ADD NEW ITEM
       </div>
     </div>
   ) : null;

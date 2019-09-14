@@ -72,8 +72,8 @@ class StoryList extends React.Component<Props> {
 
     const addStoryMenu = (
       <Menu>
-        <Menu.Item text="New" icon="plus" onClick={this.addStory} />
-        <Menu.Item text="Import from JSON..." icon="import" onClick={this.clickFileSelector} />
+        <Menu.Item text="Create new" icon="plus" onClick={this.addStory} />
+        <Menu.Item text="Import from JSON" icon="import" onClick={this.clickFileSelector} />
       </Menu>
     );
 
@@ -90,9 +90,9 @@ class StoryList extends React.Component<Props> {
         <div className="story-list__header">
           <h1>Stories</h1>
           <ButtonGroup>
-            <Button text="Add Story" icon="cube-add" intent="success" onClick={this.addStory} />
+            <Button text="Add Story" icon="cube-add" intent="none" onClick={this.addStory} />
             <Popover content={addStoryMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
-              <Button intent="success" rightIcon="caret-down" />
+              <Button intent="none" rightIcon="caret-down" />
             </Popover>
           </ButtonGroup>
         </div>

@@ -80,16 +80,17 @@
     }
 
     & .line {
-      border-bottom: 1px dashed $lesslightergray;
+      border-bottom: 1px dashed $green;
       width: 100%;
     }
 
     & .text {
-      color: #828282;
+      font-weight: bold;
+      color: $green;
       font-size: 9px;
-      background: whitesmoke;
+      background: $gray;
       margin-top: -6px;
-      width: 130px;
+      width: 76;
     }
   }
 }

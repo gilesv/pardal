@@ -1,12 +1,12 @@
 .story-list-item {
-  border-left: 4px solid transparent;
-  font-size: 12px;
-  padding: 10px 15px;
+  border-left: 5px solid transparent;
+  font-size: 13px;
+  padding: 14px 21px;
   position: relative;
   cursor: pointer;
 
   &__name {
-    max-width: 140px;
+    max-width: 240px;
   }
 
   &__delete {

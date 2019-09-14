@@ -1,15 +1,17 @@
-html, body {
-  width: 100%;
-  height: 100%;
-}
-
 // colors
 $primary: #6600ff;
+$gray: #f9f9f9;
 
 $lightgray: #cfd0d1;
 $lesslightergray: #bbbdbd;
 $lightpurple: #d8c1fb;
 $darkpurple: #5107bf;
+$green: #569f6b;
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
 
 @import "./components/app";
 @import "./components/dashboard";
