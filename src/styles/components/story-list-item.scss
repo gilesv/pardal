@@ -4,31 +4,20 @@
   padding: 14px 21px;
   position: relative;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 
   &__name {
     max-width: 240px;
   }
 
-  &__delete {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    color: rgb(126, 126, 126);
-    opacity: 0;
-    display: none;
-  }
-
-  &:hover &__delete {
-    opacity: 1;
+  &__options {
   }
 
   &.selected {
     border-left-color: $primary;
     background-color: lavender;
-    
-    &__name {
-      font-weight: 600;
-    }
   }
 
   &__items-count {

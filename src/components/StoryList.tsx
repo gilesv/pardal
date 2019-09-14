@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from "react";
 import StoryListItem from "./StoryListItem";
-import { addStory, removeStory, selectStory } from "../redux/actions";
+import { addStory, removeStory, selectStory, removeTask } from "../redux/actions";
 import { Button, NonIdealState, Menu, ButtonGroup, Popover, Position } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../redux/reducers";
@@ -20,8 +20,10 @@ class StoryList extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.fileSelector = React.createRef();
+
     this.addStory = this.addStory.bind(this);
     this.clickFileSelector = this.clickFileSelector.bind(this);
+    this.deleteStory = this.deleteStory.bind(this);
   }
 
   public addStory() {
@@ -50,8 +52,13 @@ class StoryList extends React.Component<Props> {
     return false;
   }
 
-  public removeStory(storyId: StoryId) {
-    this.props.dispatch(removeStory(storyId));
+  public deleteStory(story: Story) {
+    for (let task of story.tasks) {
+      this.props.dispatch(removeTask(task.id, story.id));
+    }
+
+    this.props.dispatch(removeStory(story.id));
+    this.props.dispatch(selectStory(0));
   }
 
   public selectStory(storyId: StoryId) {
@@ -107,7 +114,7 @@ class StoryList extends React.Component<Props> {
                   key={`story#${storyId}`}
                   isSelected={selectedStory === index}
                   selectStory={(storyId: StoryId) => this.selectStory(storyId)}
-                  removeStory={(storyId: StoryId) => this.removeStory(storyId)} />
+                  deleteStory={this.deleteStory} />
               }) : <NonIdealState
                 className="story-list__no-items"
                 title="Nothing here 😴"

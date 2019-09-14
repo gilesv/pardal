@@ -116,7 +116,7 @@ export default class TaskItem extends React.Component<Props> {
         <Dialog isOpen={this.state.isDialogVisible} onClose={this.toggleDialog} title="Delete item">
           <div className={Classes.DIALOG_BODY}>
             Are you really sure to delete the following item: <b>{task.title}</b>? This cannot be undone.
-        </div>
+          </div>
 
           <div className={`${Classes.DIALOG_FOOTER} task-item__dialog-footer`} >
             <Button intent="none" onClick={this.toggleDialog}>Cancel</Button>
