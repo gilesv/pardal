@@ -2,9 +2,10 @@
 $primary: #6600ff;
 $gray: #f9f9f9;
 
-$lightgray: #cfd0d1;
+$lightgray: #e8e8e8;
 $lesslightergray: #bbbdbd;
-$lightpurple: #d8c1fb;
+$lavender: #e6e6fa;
+$purple: #6600ff;
 $darkpurple: #5107bf;
 $green: #569f6b;
 
@@ -72,4 +73,20 @@ button svg[data-icon*="chevron"] {
 
 .fira {
   font-family: FiraCode;
+}
+
+.bp3-dialog {
+  background: white;
+  border-radius: 5px;
+  border-top: 3px solid $purple;
+
+  &-header {
+    padding: 13px 25px;
+  }
+
+  &-footer {
+    button.bp3-button {
+      margin-left: 11px;
+    }
+  }
 }

@@ -66,7 +66,7 @@ class StoryList extends React.Component<Props> {
           accept=".json, application/json" />
 
         <div className="story-list__header">
-          <h1>Stories</h1>
+          <span>Stories</span>
           <ButtonGroup>
             <Button text="Add Story" icon="cube-add" intent="none" onClick={this.handleClickCreateNewStory} />
             <Popover content={addStoryMenu} position={Position.BOTTOM_RIGHT} minimal={true}>
