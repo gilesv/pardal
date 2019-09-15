@@ -176,6 +176,7 @@ class Trader {
       task.type = taskObj.type;
       task.area = taskObj.area;
       task.assignee = taskObj.assignee;
+      task.isBodyVisible = taskObj.isBodyVisible === undefined ? true : taskObj.isBodyVisible;
 
       return task;
     } catch (e) {

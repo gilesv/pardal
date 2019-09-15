@@ -46,6 +46,8 @@ class Dashboard extends React.Component<Props> {
 
   public deleteStory(story: Story, index: number) {
     const selectedStory = this.props.selectedStory;
+    const isFirstStory = index === 0;
+    const isSelected = index === selectedStory;
     const isAfterSelected = index > selectedStory;
 
     for (let task of story.tasks) {
@@ -54,7 +56,9 @@ class Dashboard extends React.Component<Props> {
 
     this.props.dispatch(removeStory(story.id));
 
-    if (!isAfterSelected) {
+    if (isFirstStory && isSelected) {
+      this.selectStory(0);
+    } else if (!isAfterSelected) {
       this.selectStory(selectedStory - 1);
     }
   }

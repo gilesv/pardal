@@ -34,7 +34,8 @@ export class Task {
     this.handOffDate = new Date();
     this.area = TaskArea.BOTH;
     this.description = "";
-    this.assignee = Assignee.A1
+    this.assignee = Assignee.A1;
+    this.isBodyVisible = true;
   }
 
   public id: TaskId;
@@ -47,4 +48,5 @@ export class Task {
   public description: string;
   public area: TaskArea;
   public assignee: string;
+  public isBodyVisible: boolean;
 }

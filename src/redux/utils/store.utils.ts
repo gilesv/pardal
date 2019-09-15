@@ -15,6 +15,14 @@ export const addToArray = (arr: any[], el: number | string, position: number): a
   }
 }
 
+export const moveInArray = (arr: any[], from: number, to: number): any => {
+  const clone = Array.from(arr);
+  const [item] = clone.splice(from, 1);
+  clone.splice(to, 0, item);
+
+  return clone;
+}
+
 export const removeFromArray = (arr: any[], el: number | string): any => {
   let clone = [...arr];
   clone.splice(clone.indexOf(el), 1);

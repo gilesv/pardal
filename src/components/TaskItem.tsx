@@ -9,6 +9,7 @@ interface Props {
   addTaskAtIndex: (index: number) => void,
   updateTask: (task: Task) => void,
   removeTask: (task: Task, storyId: StoryId) => void,
+  isRaised: boolean,
   index: number,
   storyId: StoryId
 }
@@ -38,10 +39,8 @@ export default class TaskItem extends React.Component<Props> {
   }
 
   toggleBody() {
-    this.setState({
-      ...this.state,
-      isBodyVisible: !this.state.isBodyVisible
-    });
+    const isOpen = this.props.task.isBodyVisible;
+    this.update("isBodyVisible", !isOpen);
   }
 
   update(key: string, value: any) {
@@ -75,7 +74,7 @@ export default class TaskItem extends React.Component<Props> {
   }
 
   render() {
-    const { task, addTaskAtIndex, index } = this.props;
+    const { task, addTaskAtIndex, index, isRaised } = this.props;
 
     const optionsMenu = (
       <Menu>
@@ -84,7 +83,7 @@ export default class TaskItem extends React.Component<Props> {
     );
 
     return (
-      <div className="task-item">
+      <div className={`task-item ${isRaised ? 'task-item--raised' : ''}`}>
         <AddTaskButton type="before" visible={index === 0} index={index} addTask={(index: number) => addTaskAtIndex(index)} />
 
         <div className="task-item__header" onClick={this.toggleBody}>
@@ -105,7 +104,7 @@ export default class TaskItem extends React.Component<Props> {
           </div>
         </div>
 
-        <Collapse isOpen={this.state.isBodyVisible}>
+        <Collapse isOpen={task.isBodyVisible}>
           <div className="task-item__body">
             <TaskForm task={task} update={this.update} updateEffort={this.updateEffort} showDates={false} />
           </div>

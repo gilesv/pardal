@@ -33,6 +33,7 @@ export enum ActionType {
   // TASK
   ADD_TASK,
   UPDATE_TASK,
+  MOVE_TASK,
   REMOVE_TASK
 }
 
@@ -173,6 +174,13 @@ export function updateTask(task: Task): IAction {
   return {
     type: ActionType.UPDATE_TASK,
     payload: { task }
+  };
+}
+
+export function moveTask(storyId: StoryId, from: number, to: number): IAction {
+  return {
+    type: ActionType.MOVE_TASK,
+    payload: { storyId, from, to }
   };
 }
 

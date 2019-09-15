@@ -1,7 +1,7 @@
 import { ActionType } from "../actions";
 import IEntityMap from "../utils/entity-map.interface";
 import IAction from "../utils/action.interface";
-import { removeFromArray, removeFromObject, addToArray } from "../utils/store.utils";
+import { removeFromArray, removeFromObject, addToArray, moveInArray } from "../utils/store.utils";
 import { Story } from "../../entities/story.entity";
 
 export default function storiesReducer(
@@ -20,6 +20,9 @@ export default function storiesReducer(
 
     case ActionType.ADD_TASK:
       return addTaskToStory(state, action.payload);
+
+    case ActionType.MOVE_TASK:
+      return moveTaskInStory(state, action.payload);
 
     case ActionType.REMOVE_TASK:
       return removeTaskFromStory(state, action.payload);
@@ -68,6 +71,20 @@ const addTaskToStory = (state: IEntityMap<Story>, payload: any) => {
   const { task, storyId, index } = payload;
   const story = state.entities[storyId];
   story.tasks = addToArray(story.tasks, task.id, index);
+
+  return {
+    ...state,
+    entities: {
+      ...state.entities,
+      [storyId]: story
+    },
+  };
+}
+
+const moveTaskInStory = (state: IEntityMap<Story>, payload: any) => {
+  const { storyId, from, to } = payload;
+  const story = { ...state.entities[storyId] };
+  story.tasks = moveInArray(story.tasks, from, to);
 
   return {
     ...state,
