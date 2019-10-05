@@ -36,6 +36,7 @@ export class Task {
     this.description = "";
     this.assignee = Assignee.A1;
     this.isBodyVisible = true;
+    this.tags = getTaskTags(this);
   }
 
   public id: TaskId;
@@ -49,4 +50,17 @@ export class Task {
   public area: TaskArea;
   public assignee: string;
   public isBodyVisible: boolean;
+  public tags: string[];
+}
+
+export const getTaskTags = (task: Task): string[] => {
+  switch (task.type) {
+    case TaskType.TASK:
+    case TaskType.ENH:
+    case TaskType.BUG:
+      return [task.type, task.area, task.assignee];
+    case TaskType.TEST:
+      return [TaskType.TASK, task.type, task.assignee];
+    default: throw new Error(`Unknown task type '${task.type}' passed`);
+  }
 }
