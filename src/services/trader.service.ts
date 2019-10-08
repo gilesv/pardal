@@ -1,7 +1,7 @@
 import { Story, StoryId } from "../entities/story.entity";
 import { IStore } from "../redux/reducers";
 import store from "../redux/store";
-import { Task, TaskArea, TaskId } from "../entities/task.entity";
+import { Task, TaskArea, TaskId, TaskType } from "../entities/task.entity";
 import { addStory, addTask } from "../redux/actions";
 
 export enum FileType {
@@ -73,7 +73,7 @@ class Trader {
 
   private taskToTXTFormat(task: Task, storyName: string): string {
     return [
-      `[${task.type}][${storyName}][${task.area === TaskArea.BOTH ? 'BE][FE' : task.area}][${task.assignee}] ${task.title}`,
+      `${task.type === TaskType.TEST ? '[TASK]' : ''}[${task.type}][${storyName}][${task.area === TaskArea.BOTH ? 'BE][FE' : task.area}][${task.assignee}] ${task.title}`,
       `[PRIORITY]: ${task.priority}`,
       `[EFFORT]: ${task.effort}`,
       `[DESCRIPTION]:\n${this.descriptionToTopics(task.description)}`
@@ -177,6 +177,7 @@ class Trader {
       task.area = taskObj.area;
       task.assignee = taskObj.assignee;
       task.isBodyVisible = taskObj.isBodyVisible === undefined ? true : taskObj.isBodyVisible;
+      task.tags = taskObj.tags;
 
       return task;
     } catch (e) {

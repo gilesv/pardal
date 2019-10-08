@@ -1,5 +1,5 @@
 import React from "react";
-import { Task } from "../entities/task.entity";
+import { Task, getTaskTags } from "../entities/task.entity";
 import TaskForm from "./TaskForm";
 import { Collapse, Tag, Icon, Classes, Button, Popover, Position, Menu, Dialog } from "@blueprintjs/core";
 import { StoryId } from "../entities/story.entity";
@@ -45,7 +45,7 @@ export default class TaskItem extends React.Component<Props> {
 
   update(key: string, value: any) {
     const updated = { ...this.props.task, [key]: value };
-    this.props.updateTask(updated);
+    this.props.updateTask({ ...updated, tags: getTaskTags(updated)});
   }
 
   updateEffort(n: number, s: string) {
@@ -89,9 +89,11 @@ export default class TaskItem extends React.Component<Props> {
         <div className="task-item__header" onClick={this.toggleBody}>
           <div className="task-item__header-left">
             <div className="task-item__tags">
-              <Tag intent="primary" minimal={true}>{task.type}</Tag>
-              <Tag intent="primary" minimal={true}>{task.area}</Tag>
-              <Tag intent="primary" minimal={true}>{task.assignee}</Tag>
+              {
+                task.tags.map((tag) => {
+                  return <Tag key={`tag#${tag}`} intent="primary" minimal={true}>{tag}</Tag>
+                })
+              }
             </div>
 
             <div className="task-item__title ellipsis">{task.title}</div>
